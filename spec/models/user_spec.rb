@@ -14,18 +14,17 @@ require 'spec_helper'
 describe User do
 
   before { @user = User.new(name: "Example User", email: "user@example.com", 
-    password: "foobar", password_confirmation: "foobar") }
+    password: "foobarar", password_confirmation: "foobarar") }
 
   subject { @user }
 
   it { should respond_to(:name) }
   it { should respond_to(:email) }
-  it { should respond_to(:password_digest) }
   it { should respond_to(:password) }
   it { should respond_to(:password_confirmation) }
   it { should respond_to(:remember_token) }
   it { should respond_to(:admin) }
-  it { should respond_to(:authenticate) }
+  # it { should respond_to(:authenticate) } This test is no longer valid as we no longer use the password_digest 
   it { should respond_to(:microposts) }
   it { should respond_to(:feed) }
   it { should respond_to(:relationships) }
@@ -137,14 +136,11 @@ describe User do
     let(:found_user) { User.find_by_email(@user.email) }
 
     describe "with valid password" do
-     it { should == found_user.authenticate(@user.password) }
+      specify { found_user.valid_password?(@user.password).should be_true }
     end
 
     describe "with invalid password" do
-     let(:user_for_invalid_password) { found_user.authenticate("invalid") }
-
-     it { should_not == user_for_invalid_password }
-     specify { user_for_invalid_password.should be_false }
+      specify { found_user.valid_password?("invalid").should be_false }
     end
   end
   

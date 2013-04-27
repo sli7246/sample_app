@@ -70,7 +70,7 @@ describe "Static pages" do
   end
 
   describe "signup page" do
-    before { visit signup_path }
+    before { visit new_user_registration_path }
     let(:heading)    { 'Sign up' }
     it { should have_selector('h1',    text: heading) }
     #let(:page_title) { '' }

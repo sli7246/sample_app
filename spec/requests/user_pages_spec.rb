@@ -34,9 +34,14 @@ describe "User pages" do
 
       it { should_not have_link('delete') }
 
+
       describe "as an admin user" do
         let(:admin) { FactoryGirl.create(:admin) }
         before do
+          
+          visit users_path
+          click_link "Sign out"
+          
           sign_in admin
           visit users_path
         end
@@ -118,7 +123,7 @@ describe "User pages" do
   end
 
   describe "signup page" do
-    before { visit signup_path }
+    before { visit new_user_registration_path }
 
     #Does the page have the right headers?
     it { should have_selector('h1',    text: 'Sign up') }
@@ -144,8 +149,8 @@ describe "User pages" do
       before do
         fill_in "Name",         with: "Example User"
         fill_in "Email",        with: "user@example.com"
-        fill_in "Password",     with: "foobar"
-        fill_in "Confirmation", with: "foobar"
+        fill_in "Password",     with: "foobarar"
+        fill_in "Confirmation", with: "foobarar"
       end
 
       describe "after saving the user" do
@@ -153,7 +158,7 @@ describe "User pages" do
         let(:user) { User.find_by_email('user@example.com') }
 
         it { should have_selector('title', text: user.name) }
-        it { should have_selector('div.alert.alert-success', text: 'Welcome') }
+        it { should have_selector('div.alert.alert-notice', text: 'Welcome') }
         it { should have_link('Sign out') }
       end
 
@@ -167,7 +172,7 @@ describe "User pages" do
     let(:user) { FactoryGirl.create(:user) }
     before { 
       sign_in user
-      visit edit_user_path(user) 
+      visit edit_user_registration_path(user) 
     }
 
     describe "page" do
@@ -177,24 +182,26 @@ describe "User pages" do
     end
 
     describe "with invalid information" do
-      before { click_button "Save changes" }
+      before { click_button "Update" }
 
       it { should have_content('error') }
     end
     
     describe "with valid information" do
-      let(:new_name)  { "New Name" }
+      let(:new_name)  { "Darien" }
       let(:new_email) { "new@example.com" }
       before do
-        fill_in "Name",             with: new_name
-        fill_in "Email",            with: new_email
-        fill_in "Password",         with: user.password
-        fill_in "Confirm Password", with: user.password
-        click_button "Save changes"
+        fill_in "Name",                 with: new_name
+        fill_in "Email",                with: new_email
+        fill_in "New Password",         with: user.password
+        fill_in "Confirm New Password", with: user.password
+        fill_in "Current Password",     with: user.password
+        click_button "Update"
       end
 
+
       it { should have_selector('title', text: new_name) }
-      it { should have_selector('div.alert.alert-success') }
+      it { should have_selector('div.alert.alert-notice') }
       it { should have_link('Sign out', href: signout_path) }
       specify { user.reload.name.should  == new_name }
       specify { user.reload.email.should == new_email }
@@ -203,16 +210,21 @@ describe "User pages" do
     describe "as wrong user" do
       let(:user) { FactoryGirl.create(:user) }
       let(:wrong_user) { FactoryGirl.create(:user, email: "wrong@example.com") }
-      before { sign_in user }
+      before { 
+          visit users_path
+          click_link "Sign out"
+          sign_in user }
 
       describe "visiting Users#edit page" do
-        before { visit edit_user_path(wrong_user) }
-        it { should_not have_selector('title', text: full_title('Edit user')) }
+        before { visit edit_user_registration_path(wrong_user) }
+        it { should_not have_selector('email', text: full_title('wrong@example.com')) }
       end
 
-      describe "submitting a PUT request to the Users#update action" do
-        before { put user_path(wrong_user) }
-        specify { response.should redirect_to(root_path) }
+      describe "submitting a PUT request to the User_registration#update action" do
+        before { put user_registration_path(wrong_user) }
+        specify { subject; response.status.should == 401 }
+        
+        #specify { response.should redirect_to(root_path) }
       end
     end
   end
