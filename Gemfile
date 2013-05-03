@@ -9,7 +9,15 @@ gem 'bootstrap-will_paginate', '0.0.6'
 gem 'pg', '0.12.2'
 gem 'jquery-rails', '2.0.2'
 
+# Authentication related gems
 gem 'devise'
+
+gem 'omniauth'
+gem 'omniauth-facebook'
+gem 'omniauth-linkedin'
+
+# Payment software
+gem 'activemerchant'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'

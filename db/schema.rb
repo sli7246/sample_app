@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130425071054) do
+ActiveRecord::Schema.define(:version => 20130503075626) do
 
   create_table "microposts", :force => true do |t|
     t.string   "content"
@@ -49,9 +49,14 @@ ActiveRecord::Schema.define(:version => 20130425071054) do
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
+    t.string   "facebookuid"
+    t.string   "linkedinuid"
+    t.boolean  "nativelogin"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true
+  add_index "users", ["facebookuid"], :name => "index_users_on_facebookuid"
+  add_index "users", ["linkedinuid"], :name => "index_users_on_linkedinuid"
   add_index "users", ["remember_token"], :name => "index_users_on_remember_token"
   add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
 

@@ -1,3 +1,6 @@
+require "omniauth-facebook"
+#OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE if Rails.env.development? 
+
 # Use this hook to configure devise mailer, warden hooks and so forth.
 # Many of these configuration options can be set straight in your model.
 Devise.setup do |config|
@@ -9,6 +12,11 @@ Devise.setup do |config|
   config.warden do |manager|
     manager.failure_app = CustomFailure
   end
+
+  config.omniauth :facebook, "294194807346006", "2ce6cc90709fcf26821dd350e7a74f50"
+  config.omniauth :linkedin, "gu351trlq2ca", "JtBnSqcLBuyMgkf6",
+        :scope => 'r_fullprofile r_emailaddress r_network', 
+        :fields => ["id", "email-address", "first-name", "last-name", "headline", "industry", "picture-url", "public-profile-url", "location", "connections"]
 
   # Configure the class responsible to send e-mails.
   # config.mailer = "Devise::Mailer"
