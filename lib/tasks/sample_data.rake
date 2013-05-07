@@ -4,6 +4,7 @@ namespace :db do
     make_users
     make_microposts
     make_relationships
+    make_appointments
   end
 end
 
@@ -39,4 +40,16 @@ def make_relationships
   followers      = users[3..40]
   followed_users.each { |followed| user.follow!(followed) }
   followers.each      { |follower| follower.follow!(user) }
+end
+
+def make_appointments
+  users = User.all
+  user = users.first
+  date = '15/4/2013'.to_date
+  appointmented_users = users[2..10]
+  appointmented_users.each {
+    |appointment_user| 
+    user.book_appointment!(appointment_user, date)
+    date += 1
+    }
 end

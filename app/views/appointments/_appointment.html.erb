@@ -1,0 +1,22 @@
+<li>
+  	<% if current_user?(appointment.user_one) %>
+  		<%= link_to gravatar_for(appointment.user_two), appointment.user_two %>
+		<span class="user">
+  		<%= link_to appointment.user_two.name, appointment.user_two %>
+  		</span>
+	<% else %>  
+  		<%= link_to gravatar_for(appointment.user_one), appointment.user_one %>
+		<span class="user">
+  		<%= link_to appointment.user_one.name, appointment.user_one %>
+  		</span>
+  	<% end%>
+  	<span class="content">On <%= appointment.app_date %></span>
+  	<span class="timestamp">
+  		<%= form_for(appointment, html: { method: :delete }) do |f| %>
+  			<%= f.hidden_field :user_two_id %>
+  			<%= f.hidden_field :user_one_id %>
+  			<%= f.hidden_field :app_date %>
+		<%= f.submit "Cancel appointment", class: "btn btn-default" %>
+		<% end %>
+  	</span>
+</li>

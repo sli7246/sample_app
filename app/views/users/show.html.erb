@@ -10,9 +10,14 @@
     <section>
       <%= render 'shared/stats' %>
     </section>
+    
+  	<div id="current_appointment">
+    <%= render 'appointment_form' if user_signed_in? %>
+    </div>
+    
   </aside> 
   <div class="span8">
-    <%= render 'follow_form' if user_signed_in? %>
+    <%= render 'users/relationship_support/follow_form' if user_signed_in? %>
     <% if @user.microposts.any? %>
       <h3>Microposts (<%= @user.microposts.count %>)</h3>
       <ol class="microposts">

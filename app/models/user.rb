@@ -19,18 +19,21 @@ class User < ActiveRecord::Base
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :name, :password, :password_confirmation, :remember_me, :facebookuid, :linkedinuid, :nativelogin
-  
-  # Commenting this out as app is now using Devise to provide authentication
-  # has_secure_password
+ 
   has_many :microposts, dependent: :destroy
   
+  # Followers/following Relationship table
   has_many :relationships, foreign_key: "follower_id", dependent: :destroy
   has_many :followed_users, through: :relationships, source: :followed
-  
-  has_many :reverse_relationships, foreign_key: "followed_id",
-                                   class_name:  "Relationship",
-                                   dependent:   :destroy
+  has_many :reverse_relationships,  foreign_key: "followed_id",
+                                    class_name:  "Relationship",
+                                    dependent:   :destroy
   has_many :followers, through: :reverse_relationships, source: :follower
+  
+  # Appointments Table
+  has_many :appointments, foreign_key: "user_one_id", dependent: :destroy
+  has_many :reverse_appointments, foreign_key: "user_two_id", class_name: "Appointment", dependent: :destroy
+  #has_many :meeting_user_two, through: :appointments, source: :user_two
   
   before_save { email.downcase! }
   before_save :create_remember_token
@@ -48,8 +51,9 @@ class User < ActiveRecord::Base
     Micropost.from_users_followed_by(self)
   end
   
+  # Relationship related methods
   def following?(other_user)
-    relationships.find_by_followed_id(other_user.id)
+    relationships.where(:followed_id=>other_user.id).first
   end
 
   def follow!(other_user)
@@ -57,7 +61,40 @@ class User < ActiveRecord::Base
   end
   
   def unfollow!(other_user)
-    relationships.find_by_followed_id(other_user.id).destroy
+    relationships.where(:followed_id=>other_user.id).first.destroy
+  end
+  
+  # Appointment related methods
+  def all_appointments
+    @all_appointments = appointments + reverse_appointments
+    @all_appointments.sort_by!{|e| e[:app_date]}
+  end
+  
+  def booked_appointment?(other_user, date)
+    appointment = appointments.where(:user_two_id=>other_user.id).where(:app_date=>date).first
+    if appointment.nil?
+      appointment = other_user.appointments.where(:user_two_id=>self.id).where(:app_date=>date).first
+    end
+    appointment
+  end
+  
+  def book_appointment!(other_user, date)
+    # Force convention where User_one ID is always less than User_two ID. 
+    # Note not checking this convention in the other methods
+    if self.id < other_user.id
+      appointments.create!(user_two_id:other_user.id, app_date:date)
+    else 
+      other_user.appointments.create!(user_two_id:self.id, app_date:date)
+    end
+  end
+  
+  def cancel_appointment!(other_user, date)
+    appointment = appointments.where(:user_two_id=>other_user.id).where(:app_date=>date).first
+    if appointment.nil?
+      appointment = other_user.appointments.where(:user_two_id=>self.id).where(:app_date=>date).first
+    end
+    
+    appointment.destroy
   end
   
   #Facebook authentication methods
@@ -65,7 +102,6 @@ class User < ActiveRecord::Base
     
     # Dummy data for passwords
     password_placeholder = Devise.friendly_token[0,20]
-    
     
     # Check to see if user has previously logged in
     if auth.provider == "facebook"
@@ -117,25 +153,11 @@ class User < ActiveRecord::Base
   def self.new_with_session(params, session)
     super.tap do |user|
       
-#      raise session["devise.omniauth_data"]["provider"].to_yaml
-#      
-#      if session["devise.omniauth_data"]["provider"] == "facebook"
-#        
-#        raise session["devise.omniauth_data"]["provider"].to_yaml 
-#        raise "Hello".to_yaml
-#        
-#        if data = session["devise.omniauth_data"] && session["devise.omniauth_data"]["extra"]["raw_info"]
-#          user.email = data["email"] if user.email.blank?
-#        end
-#      elsif session["devise.omniauth_data"]["provider"] == "linkedin"
-#        
-#        #raise session["devise.omniauth_data"]["provider"].to_yaml 
-#        raise "World".to_yaml 
-#        
-#        if data = session["devise.omniauth_data"]
-#          user.email = data["info"]["email"] if user.email.blank?
-#        end
-#      end 
+      # Note this only works for Facebook Authentication right now. Basically puts the email into the sign-up grid.
+      # Not critical enough to spend time fixing. 
+      if data = session["devise.omniauth_data"] && session["devise.omniauth_data"]["extra"]["raw_info"]
+        user.email = data["email"] if user.email.blank?
+      end
     end
   end
   
@@ -147,3 +169,7 @@ class User < ActiveRecord::Base
       self.remember_token = SecureRandom.urlsafe_base64
     end
 end
+
+ 
+  # Commenting this out as app is now using Devise to provide authentication
+  # has_secure_password

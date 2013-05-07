@@ -6,6 +6,10 @@ class UsersController < ApplicationController
   def show
     @user = User.find(params[:id])
     @microposts = @user.microposts.paginate(page: params[:page])
+
+    if signed_in?
+      @appointments = current_user.all_appointments.paginate(page: params[:app_page])
+    end
   end
 
   def new

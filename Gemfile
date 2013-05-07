@@ -11,10 +11,12 @@ gem 'jquery-rails', '2.0.2'
 
 # Authentication related gems
 gem 'devise'
-
 gem 'omniauth'
 gem 'omniauth-facebook'
 gem 'omniauth-linkedin'
+
+# Data Picker
+gem 'bootstrap-datepicker-rails'
 
 # Payment software
 gem 'activemerchant'

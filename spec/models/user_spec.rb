@@ -24,7 +24,6 @@ describe User do
   it { should respond_to(:password_confirmation) }
   it { should respond_to(:remember_token) }
   it { should respond_to(:admin) }
-  # it { should respond_to(:authenticate) } This test is no longer valid as we no longer use the password_digest 
   it { should respond_to(:microposts) }
   it { should respond_to(:feed) }
   it { should respond_to(:relationships) }
@@ -33,6 +32,10 @@ describe User do
   it { should respond_to(:following?) }
   it { should respond_to(:follow!) }
   it { should respond_to(:followers) }
+  it { should respond_to(:appointments) }
+  it { should respond_to(:booked_appointment?) }
+  it { should respond_to(:book_appointment!) }
+  it { should respond_to(:cancel_appointment!) }
   
   it { should be_valid }
   it { should_not be_admin }
@@ -215,6 +218,38 @@ describe User do
 
       it { should_not be_following(other_user) }
       its(:followed_users) { should_not include(other_user) }
+    end
+  end
+  
+  describe "booking appointments" do
+    let(:other_user) { FactoryGirl.create(:user) }    
+    let(:date) {"1/1/2014".to_date}
+    before do
+      @user.save
+      @user.book_appointment!(other_user, date)
+    end
+
+    it { should be_booked_appointment(other_user, date) }
+    
+    it "should not allow me to create a duplicate" do
+      expect { @user.book_appointment!(other_user, date) }.to raise_error
+    end
+    
+    describe "and cancelling from user one's perspective" do
+      before { @user.cancel_appointment!(other_user, date) }
+      it { should_not be_booked_appointment(other_user, date) }
+    end
+    
+    describe "and cancelling from user two's perspective " do
+      before { other_user.cancel_appointment!(@user, date) }
+      it { should_not be_booked_appointment(other_user, date) }
+    end
+    
+    describe "checking the appointment from other_user's perspective should exist" do
+      it { should be_booked_appointment(other_user, date) }
+      it "should then not be bookable in reverse" do
+        expect { other_user.book_appointment!(@user, date) }.to raise_error
+      end
     end
   end
 end
