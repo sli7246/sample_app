@@ -1,27 +1,24 @@
 <% unless current_user?(@user) %>
 	<hr></hr>
 	<h4>Book a chat now!</h4>
-	<h5>Step 1: Please select a date to view availability</h5>
-	<%= form_for(current_user.appointments.build(user_two_id:@user.id)) do |f| %>
-  		<div>
-  			<%= f.hidden_field :user_two_id %>
-  			<%= f.text_field :app_date, :class =>"datepicker span3"%>
-  		</div>
- 		<%= f.submit "Book", class: "btn btn-default btn-primary" %>
-		<script type="text/javascript">
-			$('.datepicker').datepicker({
-				startDate: '+1d'
-			})
-		</script>
-	<% end %>
 	
-	<hr></hr>
-	<% if @user.all_appointments.any? %>
-		<h4>Your upcoming chats</h4>
-      	<ol class="microposts">
-        	<%= render @appointments %>
-      	</ol>
-      	<%= will_paginate @appointments %>
+	<div id= "book_appointment_form">
+		<%= render 'appointments/book_appointment'%>
+	</div>
+	
+  	<div id="set_time_zone_form">
+		<%= render 'appointments/set_time_zone'%>
+	</div>
+	
+	<% if current_user.time_zone %>
+		<hr></hr>
+		<% if @user.all_appointments.any? %>
+			<h4>Your upcoming chats</h4>
+	      	<ol class="microposts">
+	        	<%= render @appointments %>
+	      	</ol>
+	      	<%= will_paginate @appointments %>
+	   	<% end %>
 	<% end %>
 <% end %>
 	

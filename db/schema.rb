@@ -11,18 +11,18 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130506030721) do
+ActiveRecord::Schema.define(:version => 20130509025206) do
 
   create_table "appointments", :force => true do |t|
     t.integer  "user_one_id"
     t.integer  "user_two_id"
-    t.date     "app_date"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "app_date_time"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
   end
 
-  add_index "appointments", ["user_one_id", "app_date"], :name => "index_appointments_on_user_one_id_and_app_date", :unique => true
-  add_index "appointments", ["user_two_id", "app_date"], :name => "index_appointments_on_user_two_id_and_app_date", :unique => true
+  add_index "appointments", ["user_one_id", "app_date_time"], :name => "index_appointments_on_user_one_id_and_app_date", :unique => true
+  add_index "appointments", ["user_two_id", "app_date_time"], :name => "index_appointments_on_user_two_id_and_app_date", :unique => true
 
   create_table "microposts", :force => true do |t|
     t.string   "content"
@@ -63,6 +63,7 @@ ActiveRecord::Schema.define(:version => 20130506030721) do
     t.string   "facebookuid"
     t.string   "linkedinuid"
     t.boolean  "nativelogin"
+    t.string   "time_zone"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true

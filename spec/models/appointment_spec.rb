@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Appointment do
   let(:user_one) { FactoryGirl.create(:user) }
   let(:user_two) { FactoryGirl.create(:user) }
-  let(:appointment) { user_one.appointments.build( user_two_id:user_two.id, app_date:"1/12/2013" ) }
+  let(:appointment) { user_one.appointments.build( user_two_id:user_two.id, app_date:"1/12/2013".to_date, app_time:Time.new("2:30PM") ) }
   
   subject { appointment }
   
@@ -30,11 +30,6 @@ describe Appointment do
 
   describe "when user_two id is not present" do
     before { appointment.user_two_id = nil }
-    it { should_not be_valid }
-  end
-  
-  describe "when date is not present" do
-    before { appointment.app_date = nil }
     it { should_not be_valid }
   end
 end

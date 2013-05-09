@@ -17,6 +17,7 @@ gem 'omniauth-linkedin'
 
 # Data Picker
 gem 'bootstrap-datepicker-rails'
+gem 'jquery-timepicker-rails'
 
 # Payment software
 gem 'activemerchant'

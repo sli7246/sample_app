@@ -1,0 +1,19 @@
+<% if current_user.time_zone %>
+	<h5>Please <a href="#" id="show_time_zone_selector">click here</a> if you are no longer in '<%= current_user.time_zone%>'</h5>
+	<div id="time_zone_selector" style="display:none;">
+<% else %>
+	<h5>Please select your current time zone</h5>
+	<div id="time_zone_selector">
+<% end %>
+
+<%= form_for(current_user, :url => {:action => 'time_zone'}, :html => { :method => :put }, remote: true) do |f| %>
+	<%= f.time_zone_select :time_zone%>
+	<%= f.submit "Update", class: "btn btn-default btn-primary" %>			
+<% end %>
+</div>
+
+<script>
+	$('#show_time_zone_selector').click(function(){
+	    $('div#time_zone_selector').css('display', 'inline');
+	});
+</script>

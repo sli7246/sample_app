@@ -18,7 +18,7 @@ class User < ActiveRecord::Base
          :omniauthable, :omniauth_providers => [:facebook, :linkedin]
 
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :email, :name, :password, :password_confirmation, :remember_me, :facebookuid, :linkedinuid, :nativelogin
+  attr_accessible :email, :name, :password, :password_confirmation, :remember_me, :facebookuid, :linkedinuid, :nativelogin, :time_zone
  
   has_many :microposts, dependent: :destroy
   
@@ -46,11 +46,16 @@ class User < ActiveRecord::Base
     
   validates :password, presence: true, length: { minimum: 6 }
   validates :password_confirmation, presence: true
+  validates_inclusion_of :time_zone, :in => ActiveSupport::TimeZone.zones_map { |m| m.name }, :message => "is not a valid Time Zone", :allow_nil => true
+  
+  def set_time_zone!
+    #self.time_zone = params[:time_zone]
+  end
   
   def feed
     Micropost.from_users_followed_by(self)
   end
-  
+
   # Relationship related methods
   def following?(other_user)
     relationships.where(:followed_id=>other_user.id).first
@@ -67,31 +72,32 @@ class User < ActiveRecord::Base
   # Appointment related methods
   def all_appointments
     @all_appointments = appointments + reverse_appointments
-    @all_appointments.sort_by!{|e| e[:app_date]}
+    @all_appointments.sort_by!{|e| e[:app_date_time]}
   end
   
-  def booked_appointment?(other_user, date)
-    appointment = appointments.where(:user_two_id=>other_user.id).where(:app_date=>date).first
+  def booked_appointment?(other_user, date_time)
+    appointment = appointments.where(:user_two_id=>other_user.id).where(:app_date_time=>date_time).first
     if appointment.nil?
-      appointment = other_user.appointments.where(:user_two_id=>self.id).where(:app_date=>date).first
+      appointment = other_user.appointments.where(:user_two_id=>self.id).where(:app_date_time=>date_time).first
     end
     appointment
   end
   
-  def book_appointment!(other_user, date)
+  def book_appointment!(other_user, date, time)
     # Force convention where User_one ID is always less than User_two ID. 
     # Note not checking this convention in the other methods
+    
     if self.id < other_user.id
-      appointments.create!(user_two_id:other_user.id, app_date:date)
+      appointments.create!(user_two_id:other_user.id, app_date:date, app_time:time)
     else 
-      other_user.appointments.create!(user_two_id:self.id, app_date:date)
+      other_user.appointments.create!(user_two_id:self.id, app_date:date, app_time:time)
     end
   end
   
-  def cancel_appointment!(other_user, date)
-    appointment = appointments.where(:user_two_id=>other_user.id).where(:app_date=>date).first
+  def cancel_appointment!(other_user, date_time)
+    appointment = appointments.where(:user_two_id=>other_user.id).where(:app_date_time=>date_time).first
     if appointment.nil?
-      appointment = other_user.appointments.where(:user_two_id=>self.id).where(:app_date=>date).first
+      appointment = other_user.appointments.where(:user_two_id=>self.id).where(:app_date_time=>date_time).first
     end
     
     appointment.destroy

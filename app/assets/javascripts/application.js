@@ -14,4 +14,5 @@
 //= require jquery_ujs
 //= require bootstrap
 //= require_tree .
-//= require bootstrap-datepicker
+//= require bootstrap-datepicker/core
+//= require jquery.timepicker.js
