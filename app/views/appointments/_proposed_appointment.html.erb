@@ -1,0 +1,81 @@
+<ol>
+	<section>
+	<% partner = current_user?(proposed_appointment.user_one) ? proposed_appointment.user_two : proposed_appointment.user_one %>
+	<div class= "meeting_gavatar span1">
+		<%= link_to gravatar_for(partner), partner%>
+	</div>
+	
+	<div class= "meeting_content span4" id= <%= "app_#{proposed_appointment.id}_comment" %>>
+		<span class="message">
+			<% if proposed_appointment.app_introduction.nil?%>
+				<%= partner.name + " "%>did not leave a message.
+			<% else %>
+				<%= proposed_appointment.app_introduction %>
+			<% end %>
+		</span>
+		<span class="timestamp">
+			Posted <%= time_ago_in_words(proposed_appointment.updated_at) %> ago.
+		</span>
+	</div>
+	
+	<div class= "meeting_editor span4" id= <%= "app_#{proposed_appointment.id}_updater" %> style="display:none;">
+		<%= form_for(proposed_appointment, :url => edit_appointment_path(proposed_appointment), :method => :get, :html => {:class => "form-horizontal"}) do |f| %>
+		<%= f.hidden_field :user_two_id %>
+			<div class="control-group">
+				Propose 3 timeslots that work for you	
+	        	<div class="controls form-inline">
+	        		Timeslot 1 
+					<%= f.text_field :prop_one_app_date, :class => 'datepicker input-small'%>
+					@
+					<%= f.text_field :prop_one_app_time, :class => 'timepicker input-small'%>
+				</div>
+	        	<div class="controls form-inline">
+	        		Timeslot 2 
+					<%= f.text_field :prop_two_app_date, :class => 'datepicker input-small'%>
+					@
+					<%= f.text_field :prop_two_app_time, :class => 'timepicker input-small'%>
+				</div>
+	        	<div class="controls form-inline">
+	        		Timeslot 3 
+					<%= f.text_field :prop_three_app_date, :class => 'datepicker input-small'%>
+					@
+					<%= f.text_field :prop_three_app_time, :class => 'timepicker input-small'%>
+				</div>
+				<div class="controls form-inline">
+					Append addition comments
+	    			<%= f.text_area :app_introduction, placeholder:@app_message %>
+				</div>	
+			</div>	
+			<%= f.submit "Update Request", class: "btn btn-small btn-primary" %>
+			<br></br>
+		<% end %>
+	</div>
+	
+	<div class= "meeting_confirm span3">
+	<%= form_for(proposed_appointment, :url => edit_appointment_path(proposed_appointment), :method => :get) do |f| %>
+	  <div class="form-inline">
+	  <%= f.select 	:app_date_time, [[proposed_appointment.display_app_date_time(proposed_appointment.prop_one_app_date_time, current_user.time_zone), proposed_appointment.prop_one_app_date_time], 
+	  								[proposed_appointment.display_app_date_time(proposed_appointment.prop_two_app_date_time, current_user.time_zone), proposed_appointment.prop_one_app_date_time], 
+	  								[proposed_appointment.display_app_date_time(proposed_appointment.prop_three_app_date_time, current_user.time_zone), proposed_appointment.prop_one_app_date_time]], 
+	  				:class => "drop_down" %>
+		<div class="class_buttons span3">
+			<a href= "#" id= <%= "update_#{proposed_appointment.id}" %> >Propose alternative times</a>		
+		</div>
+		<div class="class_buttons span3">
+		  	<%= f.submit " Reject ", class: "btn btn-small " %>
+		  	<%= f.submit "Book it!", class: "btn btn-small btn-primary" %>		
+		</div>
+	  </div>
+	<% end %>
+	
+	<h5></h5>
+	</div>
+	
+	<script>
+		$('<%= "#update_#{proposed_appointment.id}" %>').click(function(){
+		    $('<%= "div#app_#{proposed_appointment.id}_updater" %>').css('display', 'inline');
+		    $('<%= "div#app_#{proposed_appointment.id}_comment" %>').css('display', 'none');
+		});
+	</script>
+	</section>
+</ol>

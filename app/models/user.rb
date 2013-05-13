@@ -70,9 +70,24 @@ class User < ActiveRecord::Base
   end
   
   # Appointment related methods
-  def all_appointments
-    @all_appointments = appointments + reverse_appointments
-    @all_appointments.sort_by!{|e| e[:app_date_time]}
+  def all_appointments(booked = nil, include_self_updates = false)
+    all_appointments = case booked
+    when nil then
+      appointments + reverse_appointments 
+    when true then
+      include_self_updates ?  appointments.where(:app_accepted => true) + 
+                              reverse_appointments.where(:app_accepted => true) : 
+                              appointments.where('app_accepted = true AND last_update_from != ?', self.id) + 
+                              reverse_appointments.where('app_accepted = true AND last_update_from != ?', self.id)
+    when false then
+      include_self_updates ?  appointments.where(:app_accepted => false) + 
+                              reverse_appointments.where(:app_accepted => false) : 
+                              appointments.where('app_accepted = false AND last_update_from != ?', self.id) + 
+                              reverse_appointments.where('app_accepted = false AND last_update_from != ?', self.id)
+    end                              
+    
+    all_appointments.nil? ? [] : all_appointments.sort_by!{|e| 
+      e[:app_date_time] || "1/1/2000"}
   end
   
   def booked_appointment?(other_user, date_time)
@@ -83,15 +98,37 @@ class User < ActiveRecord::Base
     appointment
   end
   
+  def propose_appointment!(other_user, prop_one_time, prop_two_time, prop_three_time, app_introduction)
+    # Mass assignment attributes
+    if self.id < other_user.id
+      appointment = appointments.new( user_two_id:other_user.id, 
+                            prop_one_app_date_time:prop_one_time.to_datetime, 
+                            prop_two_app_date_time:prop_two_time.to_datetime, 
+                            prop_three_app_date_time:prop_three_time.to_datetime,
+                            app_introduction: app_introduction.to_s)           
+    else 
+      appointment = other_user.appointments.new(user_two_id:self.id, 
+                            prop_one_app_date_time:prop_one_time.to_datetime, 
+                            prop_two_app_date_time:prop_two_time.to_datetime, 
+                            prop_three_app_date_time:prop_three_time.to_datetime,
+                            app_introduction: app_introduction.to_s)            
+    end
+    
+    # Non Mass assignment attributes
+    appointment.last_update_from = self.id
+      
+    appointment.save!      
+  end
+  
   def book_appointment!(other_user, date, time)
     # Force convention where User_one ID is always less than User_two ID. 
-    # Note not checking this convention in the other methods
+    # Note not checking this convention in the other method
     
-    if self.id < other_user.id
-      appointments.create!(user_two_id:other_user.id, app_date:date, app_time:time)
-    else 
-      other_user.appointments.create!(user_two_id:self.id, app_date:date, app_time:time)
-    end
+    #if self.id < other_user.id
+    #  appointments.create!(user_two_id:other_user.id, app_date:date, app_time:time)
+    #else 
+    #  other_user.appointments.create!(user_two_id:self.id, app_date:date, app_time:time)
+    #end
   end
   
   def cancel_appointment!(other_user, date_time)

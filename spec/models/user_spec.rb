@@ -220,39 +220,4 @@ describe User do
       its(:followed_users) { should_not include(other_user) }
     end
   end
-  
-  describe "booking appointments" do
-    let(:other_user) { FactoryGirl.create(:user) }    
-    let(:date) {"1/1/2014".to_date}  
-    let(:time) {Time.new("2:30PM")}
-    let(:datetime) {DateTime.new(date.year, date.month, date.day, time.hour, time.min)}
-     
-    before do
-      @user.save
-      @user.book_appointment!(other_user, date, time)
-    end
-
-    it { should be_booked_appointment(other_user, datetime) }
-    
-    it "should not allow me to create a duplicate" do
-      expect { @user.book_appointment!(other_user, date, time) }.to raise_error
-    end
-    
-    describe "and cancelling from user one's perspective" do
-      before { @user.cancel_appointment!(other_user, datetime) }
-      it { should_not be_booked_appointment(other_user, datetime) }
-    end
-    
-    describe "and cancelling from user two's perspective " do
-      before { other_user.cancel_appointment!(@user, datetime) }
-      it { should_not be_booked_appointment(other_user, datetime) }
-    end
-    
-    describe "checking the appointment from other_user's perspective should exist" do
-      it { should be_booked_appointment(other_user, datetime) }
-      it "should then not be bookable in reverse" do
-        expect { other_user.book_appointment!(@user, date, time) }.to raise_error
-      end
-    end
-  end
 end

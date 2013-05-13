@@ -2,17 +2,22 @@
 <div class="row">
   <aside class="span4">
     <section>
-      <h1>
-        <%= gravatar_for @user %>
-        <%= @user.name %>
-      </h1>
+      	<h1>
+        	<%= gravatar_for @user %>
+        	<%= @user.name %>
+      	</h1>
     </section>
     <section>
-      <%= render 'shared/stats' %>
+      	<%= render 'shared/stats' %>
     </section>	
-  	<%= render 'appointment_form' if user_signed_in? %>
+  		<%= render 'appointment_form' if user_signed_in? %>
     
   </aside> 
+  <!-- Right partition -->
+  <section>
+  <div class="span8">
+  	<%= render 'appointments/book_appointment'%>
+  </div>    
   <div class="span8">
     <%= render 'users/relationship_support/follow_form' if user_signed_in? %>
     <% if @user.microposts.any? %>
@@ -23,4 +28,5 @@
       <%= will_paginate @microposts %>
     <% end %>
   </div>
+  </section>
 </div>

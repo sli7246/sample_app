@@ -3,7 +3,7 @@
 	<h4>Book a chat now!</h4>
 	
 	<div id= "book_appointment_form">
-		<%= render 'appointments/book_appointment'%>
+		<%= render 'appointments/propose_appointment'%>
 	</div>
 	
   	<div id="set_time_zone_form">
@@ -12,12 +12,12 @@
 	
 	<% if current_user.time_zone %>
 		<hr></hr>
-		<% if @user.all_appointments.any? %>
+		<% if @booked_appointments.any? %>
 			<h4>Your upcoming chats</h4>
-	      	<ol class="microposts">
-	        	<%= render @appointments %>
+	      	<ol class="booked_appointment">
+    			<%= render partial: 'appointments/booked_appointment', collection: @booked_appointments %>
 	      	</ol>
-	      	<%= will_paginate @appointments %>
+	      	<%= will_paginate @booked_appointments %>
 	   	<% end %>
 	<% end %>
 <% end %>

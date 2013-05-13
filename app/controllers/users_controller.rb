@@ -8,7 +8,11 @@ class UsersController < ApplicationController
     @microposts = @user.microposts.paginate(page: params[:page])
 
     if signed_in?
-      @appointments = current_user.all_appointments.paginate(page: params[:app_page])
+      @booked_appointments = current_user.all_appointments(true, true).paginate(page: params[:app_page]) 
+      @proposed_appointments = current_user.all_appointments(false).paginate(page: params[:final_app_page]) 
+      
+      # Should really just store names separately as first name and last name
+      @app_message = "What would you like to speak with " + @user.name.split(" ")[0] + " about?"
     end
   end
 
@@ -50,7 +54,7 @@ class UsersController < ApplicationController
           @user = User.find(params[:id])
           redirect_to @user
        }
-      format.js
+      #format.js
     end
   end
   

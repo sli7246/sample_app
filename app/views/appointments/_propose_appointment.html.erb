@@ -1,0 +1,42 @@
+<% if current_user.time_zone %>
+	<h5>Step 1: Please select a date to view availability</h5>
+	
+	<%= form_for(current_user.appointments.build(user_two_id:params[:id]), :html => {:class => "form-horizontal"}) do |f| %>
+		<%= f.hidden_field :user_two_id %>
+		<div class="control-group">
+			Propose 3 timeslots that work for you	
+        	<div class="controls form-inline">
+        		Timeslot 1 
+				<%= f.text_field :prop_one_app_date, :class => 'datepicker input-small'%>
+				@
+				<%= f.text_field :prop_one_app_time, :class => 'timepicker input-small'%>
+			</div>
+        	<div class="controls form-inline">
+        		Timeslot 2 
+				<%= f.text_field :prop_two_app_date, :class => 'datepicker input-small'%>
+				@
+				<%= f.text_field :prop_two_app_time, :class => 'timepicker input-small'%>
+			</div>
+        	<div class="controls form-inline">
+        		Timeslot 3 
+				<%= f.text_field :prop_three_app_date, :class => 'datepicker input-small'%>
+				@
+				<%= f.text_field :prop_three_app_time, :class => 'timepicker input-small'%>
+			</div>
+			<div class="controls form-inline">
+				Optional Message
+    			<%= f.text_area :app_introduction, placeholder:@app_message %>
+			</div>	
+		</div>	
+		<%= f.submit "  Book  ", class: "btn btn-default btn-primary" %>
+		
+		<br></br>
+		
+		<script type="text/javascript">
+			$('.datepicker').datepicker({
+			startDate: '+1d'
+			});
+			$('.timepicker').timepicker();
+		</script>
+	<% end %>
+<% end %>

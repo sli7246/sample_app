@@ -10,12 +10,18 @@
       <section>
         <%= render 'shared/micropost_form' %>
       </section>
+      
     </aside>
-    <div class="span8">
-      <h3>Micropost Feed</h3>
-      <%= render 'shared/feed' %>
-    </div>
-  </div>  
+	<!-- Right partition -->
+	<section>
+		<div class="span8">
+			<%= render 'appointments/book_appointment'%>
+		</div>    
+		<div class="span8">
+	  		<%= render 'shared/feed' %>
+		</div>
+	</section>
+  </div> 
 <% else %>
   <div class="center hero-unit">
     <h1>Welcome to the Sample App</h1>

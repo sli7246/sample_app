@@ -1,17 +1,11 @@
-<% if current_user.time_zone %>
-	<h5>Step 1: Please select a date to view availability</h5>
-	<%= form_for(current_user.appointments.build(user_two_id:params[:id])) do |f| %>
-		<div>
-			<%= f.hidden_field :user_two_id %>
-			<%= f.text_field :app_date, :class => "datepicker span3"%>
-			<%= f.text_field :app_time, :id => 'timepicker', :class => 'span2'%>
-		</div>
-		<%= f.submit "  Book  ", class: "btn btn-default btn-primary" %>
-		<script type="text/javascript">
-			$('.datepicker').datepicker({
-			startDate: '+1d'
-			});
-			$('#timepicker').timepicker();
-		</script>
+<% unless @proposed_appointments.nil? %>
+	<% if @proposed_appointments.any? %>
+	
+		<h3>Outstanding chat requests</h3>
+		<h4 id="proposed_appointments_subtitle">Which times work for you?</h4>
+	  	<ol class="proposed_appointment">
+	    	<%= render partial: 'appointments/proposed_appointment', collection: @proposed_appointments %>
+	  	</ol>
+	  	<%= will_paginate @proposed_appointments %>
 	<% end %>
 <% end %>

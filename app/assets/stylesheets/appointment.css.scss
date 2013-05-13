@@ -1,0 +1,56 @@
+@import "main";
+
+/* Appointments */
+#proposed_appointments_subtitle {
+  color: $grayLight;
+}
+
+.proposed_appointment{
+  margin-left: 0px;
+  ol{
+      margin-left: 0px;
+      section {
+        margin-bottom: 10px;
+        .meeting_gavatar {
+          margin-left: 0px;
+          margin-right: 0px;
+        }
+        .meeting_content {
+          margin-left: 10px;
+          margin-right: 0px;
+          .message {
+            display: block;
+          }
+        }
+        .meeting_editor {
+          margin-left: 10px;
+          margin-right: 0px;
+          display:block;
+        }
+        .meeting_confirm{
+          margin-left: 0px;
+          margin-right: 0px;
+          display:block;
+          #appointment_app_date_time {
+            width: 205px;
+            float: right;
+          }
+          .btn {
+            margin: 5px 0px 0px 5px; 
+            float: right;
+          }
+          a {
+            float: right;
+          }
+          .class_buttons {
+            display: inline;
+            float: right;
+          }
+          
+        }
+        .timestamp {
+          color: $grayLight;
+      } 
+    }
+  }
+}
