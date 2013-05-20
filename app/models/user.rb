@@ -116,8 +116,8 @@ class User < ActiveRecord::Base
     
     # Non Mass assignment attributes
     appointment.last_update_from = self.id
-      
-    appointment.save!      
+    appointment.save!
+    appointment      
   end
   
   def book_appointment!(other_user, date, time)

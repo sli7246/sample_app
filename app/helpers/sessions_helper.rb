@@ -15,7 +15,7 @@ module SessionsHelper
   #end
   
   def store_location
-    session[:return_to] = request.url
+    session[:return_to] = request.referrer
   end
 end
 #  #def sign_in_(user)

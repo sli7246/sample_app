@@ -14,8 +14,9 @@ development:
 test:
   adapter: postgresql
   host: localhost
-  database: sample_app
+  database: sample_app_test
 
+# Heroku automatically generates a Database.yml file. Would prefer below is correct, but can live with this for now.
 production:
   adapter: sqlite3
   database: db/production.sqlite3

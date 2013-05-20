@@ -14,4 +14,11 @@ FactoryGirl.define do
     content "Lorem ipsum"
     user
   end
+  
+  factory :appointment do
+    app_introduction "Lorem ipsum"
+    association :user_one, factory: :user
+    association :user_two, factory: :user
+    #last_update_from user_one
+  end
 end

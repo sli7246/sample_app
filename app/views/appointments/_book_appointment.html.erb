@@ -1,11 +1,37 @@
 <% unless @proposed_appointments.nil? %>
 	<% if @proposed_appointments.any? %>
-	
-		<h3>Outstanding chat requests</h3>
-		<h4 id="proposed_appointments_subtitle">Which times work for you?</h4>
-	  	<ol class="proposed_appointment">
-	    	<%= render partial: 'appointments/proposed_appointment', collection: @proposed_appointments %>
-	  	</ol>
-	  	<%= will_paginate @proposed_appointments %>
+		<h3>Outstanding chat invitations</h3>
+		
+		<!-- Prevent showing of proposed appoints without an associated time zone -->
+		<% if !(current_user.time_zone.nil?) %>
+			<h4 id="proposed_appointments_subtitle">Which times work for you?</h4>
+		  	<ol class="proposed_appointment">
+		    	<%= render partial: 'appointments/proposed_appointment', collection: @proposed_appointments %>
+		  	</ol>
+		  	<%= will_paginate @proposed_appointments %>
+		<% end %>
+		
+		<!-- Code block to show time zones and associated items -->
+		<% if current_user.time_zone.nil? %>
+			<h4>You must enter your current time zone to view your outstanding chat requests</h4>
+			<div id="time_zone_selector">
+		<% else %>
+			<h5>Please <a href="#" id="main_show_time_zone_selector">click here</a> if you are no longer in '<%= current_user.time_zone%>'</h5>
+			<div id="time_zone_selector" style="display:none;">
+		<% end %>
+				<div class= "span4" id="main_set_time_form">
+					<%= form_for(current_user, :url => time_zone_user_path(current_user), :html => { :method => :put }) do |f| %>
+						<%= f.time_zone_select :time_zone %>
+						<%= f.submit "Update", class: "btn btn-small btn-primary" %>			
+					<% end %>
+				</div>
+			</div>
 	<% end %>
 <% end %>
+
+<!-- Clicking on the change time zone link will reveal the drop down menu, otherwise keep the page clean -->
+<script>
+	$('#main_show_time_zone_selector').click(function(){
+	    $('div#time_zone_selector').css('display', 'inline');
+	});
+</script>

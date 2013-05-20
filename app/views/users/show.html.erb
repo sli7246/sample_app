@@ -15,11 +15,11 @@
   </aside> 
   <!-- Right partition -->
   <section>
+    <%= render 'users/relationship_support/follow_form' if user_signed_in? %>
   <div class="span8">
   	<%= render 'appointments/book_appointment'%>
   </div>    
   <div class="span8">
-    <%= render 'users/relationship_support/follow_form' if user_signed_in? %>
     <% if @user.microposts.any? %>
       <h3>Microposts (<%= @user.microposts.count %>)</h3>
       <ol class="microposts">

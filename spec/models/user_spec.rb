@@ -220,4 +220,31 @@ describe User do
       its(:followed_users) { should_not include(other_user) }
     end
   end
+  
+  describe "proposing appointment" do
+    let(:other_user) { FactoryGirl.create(:user) } 
+    let(:prop_one_time)     { Time.new(2013, 7, 24, 
+                                 10, 30, 0, "+00:00") - 0} 
+    let(:prop_two_time)     { Time.new(2013, 7, 24, 
+                                 10, 30, 0, "+00:00") - 0} 
+    let(:prop_three_time)   { Time.new(2013, 7, 24, 
+                                 10, 30, 0, "+00:00") - 0}
+    let(:app_introduction)  { "" }                              
+                          
+    before do
+      @user.save
+      @appointment = @user.propose_appointment!(other_user, prop_one_time, prop_two_time, prop_three_time, app_introduction)
+      @appointment.save
+    end
+    
+    its(:all_appointments) { should include( @appointment ) }
+    
+    describe "proposed appointment" do
+      subject {@appointment}
+      
+      it "reflect the last update was from @user" do
+        @appointment.last_update_from.should == @user.id
+      end
+    end 
+  end
 end

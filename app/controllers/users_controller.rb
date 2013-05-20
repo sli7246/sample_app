@@ -48,11 +48,12 @@ class UsersController < ApplicationController
   end
   
   def time_zone
+    store_location
     current_user.update_attribute(:time_zone, params[:user][:time_zone])
     respond_to do |format|
       format.html { 
           @user = User.find(params[:id])
-          redirect_to @user
+          redirect_to(session[:return_to] || root_url)
        }
       #format.js
     end

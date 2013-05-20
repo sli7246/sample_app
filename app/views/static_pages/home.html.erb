@@ -10,7 +10,22 @@
       <section>
         <%= render 'shared/micropost_form' %>
       </section>
-      
+      <section>
+	  	<div id="set_time_zone_form">
+			<%= render 'appointments/set_time_zone'%>
+		</div>
+		
+		<% if current_user.time_zone %>
+			<hr></hr>
+			<% if @booked_appointments.any? %>
+				<h4>Your upcoming chats</h4>
+		      	<ol class="booked_appointment">
+	    			<%= render partial: 'appointments/booked_appointment', collection: @booked_appointments %>
+		      	</ol>
+		      	<%= will_paginate @booked_appointments %>
+		   	<% end %>
+		<% end %>
+      </section>
     </aside>
 	<!-- Right partition -->
 	<section>
@@ -40,3 +55,4 @@
 
   <%= link_to image_tag("rails.png", alt: "Rails"), 'http://rubyonrails.org/' %>
 <% end %> 
+

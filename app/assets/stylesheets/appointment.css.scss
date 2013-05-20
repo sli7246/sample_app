@@ -5,6 +5,16 @@
   color: $grayLight;
 }
 
+#time_zone_selector {
+  #main_set_time_form {
+    float: right;
+    margin-right: 0px; 
+  }
+  .btn {
+    float: right;
+  }
+}
+
 .proposed_appointment{
   margin-left: 0px;
   ol{
@@ -31,6 +41,7 @@
           margin-left: 0px;
           margin-right: 0px;
           display:block;
+          float: right;
           #appointment_app_date_time {
             width: 205px;
             float: right;

@@ -8,7 +8,7 @@
 	<div class= "meeting_content span4" id= <%= "app_#{proposed_appointment.id}_comment" %>>
 		<span class="message">
 			<% if proposed_appointment.app_introduction.nil?%>
-				<%= partner.name + " "%>did not leave a message.
+				<%= partner.name + " " %>did not leave a message.
 			<% else %>
 				<%= proposed_appointment.app_introduction %>
 			<% end %>
@@ -55,8 +55,8 @@
 	<%= form_for(proposed_appointment, :url => edit_appointment_path(proposed_appointment), :method => :get) do |f| %>
 	  <div class="form-inline">
 	  <%= f.select 	:app_date_time, [[proposed_appointment.display_app_date_time(proposed_appointment.prop_one_app_date_time, current_user.time_zone), proposed_appointment.prop_one_app_date_time], 
-	  								[proposed_appointment.display_app_date_time(proposed_appointment.prop_two_app_date_time, current_user.time_zone), proposed_appointment.prop_one_app_date_time], 
-	  								[proposed_appointment.display_app_date_time(proposed_appointment.prop_three_app_date_time, current_user.time_zone), proposed_appointment.prop_one_app_date_time]], 
+	  								[proposed_appointment.display_app_date_time(proposed_appointment.prop_two_app_date_time, current_user.time_zone), proposed_appointment.prop_two_app_date_time], 
+	  								[proposed_appointment.display_app_date_time(proposed_appointment.prop_three_app_date_time, current_user.time_zone), proposed_appointment.prop_three_app_date_time]], 
 	  				:class => "drop_down" %>
 		<div class="class_buttons span3">
 			<a href= "#" id= <%= "update_#{proposed_appointment.id}" %> >Propose alternative times</a>		
