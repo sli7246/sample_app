@@ -6,12 +6,13 @@ describe "appointments" do
 
   let(:user) { FactoryGirl.create(:user) }
   let(:other_user) { FactoryGirl.create(:user) }
-  let(:prop_one_time) { Time.new(2013, 7, 24, 10, 30, 0, "+00:00") - 0 } 
-  let(:prop_two_time) { Time.new(2013, 7, 25, 10, 30, 0, "+00:00") - 0 } 
-  let(:prop_three_time) { Time.new(2013, 7, 26, 10, 30, 0, "+00:00") - 0 }
+  let(:prop_one_time) { Time.new(2023, 7, 24, 10, 30, 0, "+00:00") - 0 } 
+  let(:prop_two_time) { Time.new(2023, 7, 25, 10, 30, 0, "+00:00") - 0 } 
+  let(:prop_three_time) { Time.new(2023, 7, 26, 10, 30, 0, "+00:00") - 0 }
    
   before do 
-    user.propose_appointment!(other_user, prop_one_time, prop_two_time, prop_three_time, "Hi this is a test case")
+    user.propose_appointment!(other_user, prop_one_time, prop_two_time, prop_three_time, "Valid Test Case")
+    user.propose_appointment!(other_user, prop_one_time-1000000000, prop_two_time-1000000000, prop_three_time-1000000000, "Invalid Historical Test Case")
     sign_in other_user
     visit root_path
   end
@@ -30,19 +31,19 @@ describe "appointments" do
      
     it { should have_content('Which times work for you?') }  
     it { should have_content('if you are no longer in') }
-    it { should have_content('Hi this is a test case') }
+    it { should have_content('Valid Test Case') }
+    it { should_not have_content('Invalid Historical Test Case') }
     
     describe "and am booking appointment" do
       before do 
         #puts page.body
         
-        select 'Jul 25, 2013 at 6:30 AM', :from => 'appointment_app_date_time'
+        select 'Jul 25, 2023 at 6:30 AM', :from => 'appointment_app_date_time'
         #within '#appointment_app_date_time' do
         #  find("option[value='2013-07-25 10:30:00 UTC']").click
         #end
         click_button 'Book it!'
       end
-      
       
       it { should have_content('Micropost Feed') }
       it { should_not have_content('Which times work for you?') }  
@@ -59,7 +60,7 @@ describe "appointments" do
         end
         
         it { should have_content("Your upcoming chats") }
-        it { should have_content("On Jul 25, 2013 at 4:30 PM")}
+        it { should have_content("On Jul 25, 2023 at 4:30 PM")}
         
         describe "Canceling the appointment should remove the booking" do
           before do

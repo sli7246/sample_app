@@ -2,15 +2,12 @@ class UsersController < ApplicationController
   before_filter :authenticate_user!, only: [:index, :edit, :destroy, :following, :followers]
   before_filter :correct_user,   only: [:edit, :update]
   before_filter :admin_user,     only: :destroy
-  
-  def show
+
+  def show 
     @user = User.find(params[:id])
     @microposts = @user.microposts.paginate(page: params[:page])
-
+    
     if signed_in?
-      @booked_appointments = current_user.all_appointments(true, true).paginate(page: params[:app_page]) 
-      @proposed_appointments = current_user.all_appointments(false).paginate(page: params[:final_app_page]) 
-      
       # Should really just store names separately as first name and last name
       @app_message = "What would you like to speak with " + @user.name.split(" ")[0] + " about?"
     end

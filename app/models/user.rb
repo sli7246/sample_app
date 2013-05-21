@@ -70,7 +70,7 @@ class User < ActiveRecord::Base
   end
   
   # Appointment related methods
-  def all_appointments(booked = nil, include_self_updates = false)
+  def all_appointments(booked = nil, include_self_updates = false, future_only = true)
     all_appointments = case booked
     when nil then
       appointments + reverse_appointments 
@@ -84,10 +84,20 @@ class User < ActiveRecord::Base
                               reverse_appointments.where(:app_accepted => false) : 
                               appointments.where('app_accepted = false AND last_update_from != ?', self.id) + 
                               reverse_appointments.where('app_accepted = false AND last_update_from != ?', self.id)
-    end                              
+    end 
     
-    all_appointments.nil? ? [] : all_appointments.sort_by!{|e| 
-      e[:app_date_time] || "1/1/2000"}
+    if future_only
+      # Depending on whether appointment is booked, evaluate on finalized time or proposed time
+      # System will assume a proposal is valid until the furtherest date becomes historical
+      all_appointments.select!{|e| 
+        evaluation_array = e[:app_accepted] ? [e[:app_date_time]] : 
+                                              [e[:prop_one_app_date_time],e[:prop_two_app_date_time],e[:prop_three_app_date_time]]
+        (evaluation_array.max || Time.new(2000,1,1)) > Time.now
+        }
+    else
+      app_appointments
+    end
+    all_appointments.nil? ? [] : all_appointments.sort_by!{|e| e[:app_date_time] || Time.new(2000,1,1) }
   end
   
   def booked_appointment?(other_user, date_time)
@@ -120,23 +130,11 @@ class User < ActiveRecord::Base
     appointment      
   end
   
-  def book_appointment!(other_user, date, time)
-    # Force convention where User_one ID is always less than User_two ID. 
-    # Note not checking this convention in the other method
-    
-    #if self.id < other_user.id
-    #  appointments.create!(user_two_id:other_user.id, app_date:date, app_time:time)
-    #else 
-    #  other_user.appointments.create!(user_two_id:self.id, app_date:date, app_time:time)
-    #end
-  end
-  
   def cancel_appointment!(other_user, date_time)
     appointment = appointments.where(:user_two_id=>other_user.id).where(:app_date_time=>date_time).first
     if appointment.nil?
       appointment = other_user.appointments.where(:user_two_id=>self.id).where(:app_date_time=>date_time).first
     end
-    
     appointment.destroy
   end
   
@@ -195,7 +193,6 @@ class User < ActiveRecord::Base
   
   def self.new_with_session(params, session)
     super.tap do |user|
-      
       # Note this only works for Facebook Authentication right now. Basically puts the email into the sign-up grid.
       # Not critical enough to spend time fixing. 
       if data = session["devise.omniauth_data"] && session["devise.omniauth_data"]["extra"]["raw_info"]

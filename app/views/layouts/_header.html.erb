@@ -4,6 +4,9 @@
       <%= link_to "sample app", root_path, id: "logo" %>
       <nav>
         <ul class="nav pull-right">
+          <% if user_signed_in? && !@booked_appointments.nil?%>
+          	<li><a href="#" onclick="myFunction()"><span id="timer"></span></a></li>
+          <% end %>
           <li><%= link_to "Home", root_path %></li>
           <li><%= link_to "Help", help_path %></li>
           <% if user_signed_in? %>
@@ -29,3 +32,37 @@
     </div>
   </div>
 </header>
+
+<!-- Don't start a count down clock if there is nothing to count down to -->
+<% unless @booked_appointments.nil? %> 
+	<script>
+	function myFunction() {
+		setTimeout(function(){
+			alert("Your chat is about to start. Click okay to proceed");
+			window.open('http://localhost:3000/users','_parent');	
+		},2000);
+	}
+	
+	var count= <%= (@booked_appointments.first.app_date_time - Time.now).round(0) %>;
+	var counter=setInterval(timer, 1000); //1000 will  run it every 1 second
+	var days_remaining, hours_remaining, minutes_remaining, seconds_remaining;
+	var next_appointment_date = "<%= @booked_appointments.first.display_app_date_time(@booked_appointments.first.app_date_time, current_user.time_zone) %>";
+	function timer()
+	{
+	  count=count-1;
+	  days_remaining = Math.floor(count/(60*60*24));
+	  hours_remaining = Math.floor((count%(60*60*24))/(60*60));
+	  minutes_remaining = Math.floor(((count%(60*60*24))%(60*60))/60);
+	  seconds_remaining = ((count%(60*60*24))%(60*60))%60;
+	  if (count <= 0)
+	  {
+	     clearInterval(counter);
+	     alert("Your chat is about to start. Click okay to proceed");
+		 window.open('http://localhost:3000/users','_parent');	
+	     return;
+	  }
+	  document.getElementById("timer").innerHTML = (days_remaining >= 1) ? "Your next chat is on " + next_appointment_date :
+	  			"Your next chat will begin in "+hours_remaining+":"+minutes_remaining+":"+seconds_remaining;
+	}
+	</script>
+<% end %>

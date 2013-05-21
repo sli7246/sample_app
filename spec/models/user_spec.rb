@@ -34,7 +34,6 @@ describe User do
   it { should respond_to(:followers) }
   it { should respond_to(:appointments) }
   it { should respond_to(:booked_appointment?) }
-  it { should respond_to(:book_appointment!) }
   it { should respond_to(:cancel_appointment!) }
   
   it { should be_valid }
