@@ -22,6 +22,7 @@ class ApplicationController < ActionController::Base
     if signed_in?
       @booked_appointments = current_user.all_appointments(true, true).paginate(page: params[:app_page]) 
       @proposed_appointments = current_user.all_appointments(false).paginate(page: params[:final_app_page]) 
+      
     end
   end
 end

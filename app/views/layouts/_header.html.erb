@@ -34,7 +34,7 @@
 </header>
 
 <!-- Don't start a count down clock if there is nothing to count down to -->
-<% unless @booked_appointments.nil? %> 
+<% unless @booked_appointments.nil? || @booked_appointments.empty? %> 
 	<script>
 	function myFunction() {
 		setTimeout(function(){
