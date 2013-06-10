@@ -1,0 +1,36 @@
+<div class="row">
+  
+  <!-- handle chat boxes -->
+  <aside class="span6">	
+  	<!-- load current user -->
+  	<h4><%= current_user.name %></h4>
+  	<div id="opentok_console"></div>
+	<div id="myCamera" class="publisherContainer"></div>
+	<div class="opentok_loading_div" id="user1_loading">
+		<img class="opentok_loading_img" src="/assets/Ajax_Loader_20130610.gif"> 
+		<p class="opentok_loading_msg">Loading your video feed...</p>
+	</div>
+	
+	<!-- load appointment partner -->
+  	<h4><%= @other_user.name %></h4>
+	<div id="subscribers"></div>
+	<div class="opentok_loading_div" id="user2_loading">
+		<img class="opentok_loading_img" src="/assets/Ajax_Loader_20130610.gif"> 
+		<p class="opentok_loading_msg">Waiting for <%= @other_user.name %>...</p>
+	</div>
+  </aside>
+  
+  <section>
+  	<div>
+  	  <h4>Whiteboard partition</h4>
+  	</div>
+  	<div>
+  	  <h4>Chat partition</h4>
+  	</div>
+  </section>
+</div>
+<script type="text/javascript" charset="utf-8">
+	var apiKey = "<%= API_KEY %>"; // Replace with your API key. See https://dashboard.tokbox.com/projects
+	var sessionId = "<%=@appointment.opentok_session%>"; // Replace with your own session ID. See https://dashboard.tokbox.com/projects
+	var token = "<%=@token%>"; // Replace with a generated token. See https://dashboard.tokbox.com/projects
+</script>

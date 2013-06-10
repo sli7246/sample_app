@@ -20,6 +20,39 @@ describe "appointments" do
   it { should have_content('Micropost Feed') } 
   it { should have_content('You must enter your current time zone to view your outstanding chat requests') }
   it { should_not have_content('Which times work for you?') }
+ 
+  describe "when entered as a typical user" do
+    before do 
+      other_user.time_zone = "Hong Kong"
+      other_user.save
+      visit user_path(user)
+      
+      # Fill in potential times
+      fill_in "appointment_prop_one_app_date", with: "05/22/2027"
+      fill_in "appointment_prop_one_app_time", with:  "12:30am"
+      fill_in "appointment_prop_two_app_date", with:  "05/23/2027"
+      fill_in "appointment_prop_two_app_time", with:  "08:30pm"
+      fill_in "appointment_prop_three_app_date", with:  "05/27/2027"
+      fill_in "appointment_prop_three_app_time", with:  "09:30am"
+      fill_in "appointment_app_introduction", with: "Appointment Booking Form Test"
+       
+      click_button "Book"
+    end 
+    
+    it { should have_content("Your appointment request has been sent.")}
+   
+    describe "The other user should see the proposed appointment" do
+      before do
+        click_link "Sign out"
+        user.time_zone = "Hong Kong"
+        user.save
+        sign_in user
+      end
+      
+      it { should have_content("Appointment Booking Form Test")}
+    end
+  end
+ 
   
   describe "with other_user with time_zone" do
     before do
@@ -45,6 +78,7 @@ describe "appointments" do
         click_button 'Book it!'
       end
       
+      it { should have_content('Congratulations! You have successfully booked the appointment.')}
       it { should have_content('Micropost Feed') }
       it { should_not have_content('Which times work for you?') }  
       it { should have_content('if you are no longer in') }
@@ -67,6 +101,7 @@ describe "appointments" do
             click_button "Cancel appointment"
           end
           
+          it { should have_content("You have turned down the appointment request.")}
           specify { user.all_appointments(false, false).any?.should == false }
         end
       end
@@ -75,16 +110,17 @@ describe "appointments" do
     describe "and am changing the appointment parameters." do
       before do 
         click_link "Propose alternative times"
-        fill_in "appointment_prop_one_app_date", with: "05/22/2013"
+        fill_in "appointment_prop_one_app_date", with: "05/22/2023"
         fill_in "appointment_prop_one_app_time", with:  "12:30am"
-        fill_in "appointment_prop_two_app_date", with:  "05/23/2013"
+        fill_in "appointment_prop_two_app_date", with:  "05/23/2023"
         fill_in "appointment_prop_two_app_time", with:  "08:30pm"
-        fill_in "appointment_prop_three_app_date", with:  "05/27/2013"
+        fill_in "appointment_prop_three_app_date", with:  "05/27/2023"
         fill_in "appointment_prop_three_app_time", with:  "09:30am"
         fill_in "appointment_app_introduction", with: "This is a stick up!"
         click_button "Update Request"
       end
      
+      it { should have_content("You have updated the appointment request.")}
       it { should_not have_content('Which times work for you?') }  
       it { should have_content('if you are no longer in') }
     

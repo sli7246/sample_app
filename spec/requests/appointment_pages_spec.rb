@@ -46,7 +46,7 @@ describe "appointments" do
       
       it { should have_content('Micropost Feed') }
       it { should_not have_content('Which times work for you?') }  
-      it { should_not have_content('if you are no longer in') }
+      # it { should_not have_content('if you are no longer in') }
       
       describe ". Original user should see booked appointment" do
         before do
@@ -61,6 +61,16 @@ describe "appointments" do
         it { should have_content("Your upcoming chats") }
         it { should have_content("On Jul 25, 2013 at 4:30 PM")}
         
+        describe ". Original user should see updated meeting time if time zone changes" do
+          before do
+            user.time_zone = "Hong Kong"
+            user.save
+            visit user_path(other_user)
+          end
+          
+          it { should have_content("On Jul 25, 2013 at 6:30 PM")}
+        end
+        
         describe "Canceling the appointment should remove the booking" do
           before do
             click_button "Cancel appointment"
@@ -74,18 +84,18 @@ describe "appointments" do
     describe "and am changing the appointment parameters." do
       before do 
         click_link "Propose alternative times"
-        fill_in "appointment_prop_one_app_date", with: "05/22/2013"
+        fill_in "appointment_prop_one_app_date", with: "05/22/2023"
         fill_in "appointment_prop_one_app_time", with:  "12:30am"
-        fill_in "appointment_prop_two_app_date", with:  "05/23/2013"
+        fill_in "appointment_prop_two_app_date", with:  "05/23/2023"
         fill_in "appointment_prop_two_app_time", with:  "08:30pm"
-        fill_in "appointment_prop_three_app_date", with:  "05/27/2013"
+        fill_in "appointment_prop_three_app_date", with:  "05/27/2023"
         fill_in "appointment_prop_three_app_time", with:  "09:30am"
         fill_in "appointment_app_introduction", with: "This is a stick up!"
         click_button "Update Request"
       end
      
       it { should_not have_content('Which times work for you?') }  
-      it { should_not have_content('if you are no longer in') }
+      # it { should_not have_content('if you are no longer in') }
     
       describe "The first user should not now be required to update the appointment" do
         before do

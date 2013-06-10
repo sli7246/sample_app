@@ -13,10 +13,17 @@ Devise.setup do |config|
     manager.failure_app = CustomFailure
   end
 
-  config.omniauth :facebook, "294194807346006", "2ce6cc90709fcf26821dd350e7a74f50"
-  config.omniauth :linkedin, "gu351trlq2ca", "JtBnSqcLBuyMgkf6",
-        :scope => 'r_fullprofile r_emailaddress r_network', 
-        :fields => ["id", "email-address", "first-name", "last-name", "headline", "industry", "picture-url", "public-profile-url", "location", "connections"]
+  if Rails.env.production?
+    config.omniauth :facebook, "294194807346006", "2ce6cc90709fcf26821dd350e7a74f50"
+    config.omniauth :linkedin, "gu351trlq2ca", "JtBnSqcLBuyMgkf6",
+          :scope => 'r_fullprofile r_emailaddress r_network', 
+          :fields => ["id", "email-address", "first-name", "last-name", "headline", "industry", "picture-url", "public-profile-url", "location", "connections"] 
+  else 
+    config.omniauth :facebook, "608175229201766", "f3d0b4f3bfbd4c3c0e3f20220dbcd24a"
+    config.omniauth :linkedin, "dr5rz1elc9dz", "tjwSQRVFlKj3k4sV",
+          :scope => 'r_fullprofile r_emailaddress r_network', 
+          :fields => ["id", "email-address", "first-name", "last-name", "headline", "industry", "picture-url", "public-profile-url", "location", "connections"] 
+  end
 
   # Configure the class responsible to send e-mails.
   # config.mailer = "Devise::Mailer"

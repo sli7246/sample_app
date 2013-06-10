@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130512152643) do
+ActiveRecord::Schema.define(:version => 20130608025105) do
 
   create_table "appointments", :force => true do |t|
     t.integer  "user_one_id"
@@ -25,10 +25,46 @@ ActiveRecord::Schema.define(:version => 20130512152643) do
     t.boolean  "app_accepted",             :default => false
     t.string   "app_introduction"
     t.integer  "last_update_from"
+    t.string   "opentok_session"
   end
 
   add_index "appointments", ["user_one_id", "app_date_time"], :name => "index_appointments_on_user_one_id_and_app_date", :unique => true
   add_index "appointments", ["user_two_id", "app_date_time"], :name => "index_appointments_on_user_two_id_and_app_date", :unique => true
+
+  create_table "bigbluebutton_rooms", :force => true do |t|
+    t.integer  "server_id"
+    t.integer  "owner_id"
+    t.string   "owner_type"
+    t.string   "meetingid"
+    t.string   "name"
+    t.string   "attendee_password"
+    t.string   "moderator_password"
+    t.string   "welcome_msg"
+    t.string   "logout_url"
+    t.string   "voice_bridge"
+    t.string   "dial_number"
+    t.integer  "max_participants"
+    t.boolean  "private",             :default => false
+    t.boolean  "randomize_meetingid", :default => true
+    t.boolean  "external",            :default => false
+    t.string   "param"
+    t.datetime "created_at",                             :null => false
+    t.datetime "updated_at",                             :null => false
+  end
+
+  add_index "bigbluebutton_rooms", ["meetingid"], :name => "index_bigbluebutton_rooms_on_meetingid", :unique => true
+  add_index "bigbluebutton_rooms", ["server_id"], :name => "index_bigbluebutton_rooms_on_server_id"
+  add_index "bigbluebutton_rooms", ["voice_bridge"], :name => "index_bigbluebutton_rooms_on_voice_bridge", :unique => true
+
+  create_table "bigbluebutton_servers", :force => true do |t|
+    t.string   "name"
+    t.string   "url"
+    t.string   "salt"
+    t.string   "version"
+    t.string   "param"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
   create_table "microposts", :force => true do |t|
     t.string   "content"

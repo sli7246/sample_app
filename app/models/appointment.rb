@@ -3,12 +3,12 @@ class Appointment < ActiveRecord::Base
     :prop_one_app_date, :prop_one_app_time, :prop_one_app_date_time,
     :prop_two_app_date, :prop_two_app_time, :prop_two_app_date_time,
     :prop_three_app_date, :prop_three_app_time, :prop_three_app_date_time, 
-    :app_introduction, :app_accepted
+    :app_introduction, :app_accepted, :session_id
   
   attr_accessor :app_date, :app_time,
     :prop_one_app_date, :prop_one_app_time,
     :prop_two_app_date, :prop_two_app_time,
-    :prop_three_app_date, :prop_three_app_time
+    :prop_three_app_date, :prop_three_app_time, :session_id
     
   
   # Validations
@@ -37,7 +37,6 @@ class Appointment < ActiveRecord::Base
   
   after_initialize :get_datetimes # convert db format to accessors
   before_validation :set_datetimes # convert accessors back to db format
-  
   
   def get_datetimes
     
@@ -94,4 +93,18 @@ class Appointment < ActiveRecord::Base
     
     app_utc_time.strftime('%b %d, %Y') +" at " + app_utc_time.strftime('%l:%M %p')
   end
+  
+  def set_opentok_session(requestip, override = false)
+    if self.opentok_session.nil? || (Time.now - updated_at)/(1.hour) > 12 || override
+      # Create OpenTok session and token
+      # @session_id = OTSDK.createSession( request.ip )      
+      sessionProperties = {OpenTok::SessionPropertyConstants::P2P_PREFERENCE => "disabled"}    # or disabled
+      self.opentok_session = OTSDK.createSession( requestip, sessionProperties ).session_id
+      self.save!
+    end
+    
+    self.opentok_session
+  end
+  
+  private 
 end

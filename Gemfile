@@ -22,6 +22,9 @@ gem 'jquery-timepicker-rails'
 # Payment software
 gem 'activemerchant'
 
+# OpenTok
+gem 'opentok'
+
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
