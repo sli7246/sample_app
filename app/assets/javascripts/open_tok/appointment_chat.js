@@ -3,10 +3,9 @@
  */
 //TB.setLogLevel(5); // Used to output values to console
 	
-if (window.location.pathname.indexOf("appointments") !== -1) {    
+if (window.location.pathname.indexOf("appointments") !== -1) {  
     window.onload = function() {
 		//Sessions parameter variables are set in the view itself.
-		
 		var session;
 		var publisher;
 		var subscribers = {};
@@ -147,6 +146,9 @@ if (window.location.pathname.indexOf("appointments") !== -1) {
 		function hide(id) {
 			document.getElementById(id).style.display = 'none';
 		}
-    	connect();
+		
+		// connect();
+	    var realtimeLoader = new rtclient.RealtimeLoader(realtimeOptions);
+	    realtimeLoader.start();
     }
 }

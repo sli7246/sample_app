@@ -25,6 +25,11 @@ gem 'activemerchant'
 # OpenTok
 gem 'opentok'
 
+# Whiteboard Related Gems
+gem 'google-api-client'
+gem 'omniauth-google-oauth2'
+gem 'rest-client'
+
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 

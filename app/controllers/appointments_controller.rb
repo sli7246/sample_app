@@ -20,6 +20,10 @@ class AppointmentsController < ApplicationController
     # Handle all OpenTok variables
     @appointment.set_opentok_session(request.ip)
     @token = OTSDK.generateToken :session_id => @appointment.session_id
+    
+    
+    # Test Code
+    refresh_token
   end
   
   def create
@@ -92,4 +96,27 @@ class AppointmentsController < ApplicationController
       format.js
     end
   end
+end
+
+private 
+
+def refresh_token
+  data = {
+    :client_id => "344761045805-4hjip9h55tl8kfnbk8mp8o05cmicvj38.apps.googleusercontent.com",
+    :client_secret => "bwN2vLFkFclcX6_bNbJfaAl4",
+    :refresh_token => "1/md4pZQURfcQUnDcptFDGFlSCYuX__aTnYZrN1MGOTto",
+    :grant_type => "refresh_token"
+  }
+  @response = ActiveSupport::JSON.decode(RestClient.post "https://accounts.google.com/o/oauth2/token", data)
+  
+  unless @response["access_token"].present?
+    flash[:notice] = "Failed to create token"
+    #self.oauth2_token = @response["access_token"]
+    #self.oauth2_token_expires_at = Time.now.utc + @response["expires_in"].to_i.seconds
+    #self.save!
+  end
+#rescue RestClient::BadRequest => e
+  # Bad request
+#rescue
+  # Something else bad happened
 end

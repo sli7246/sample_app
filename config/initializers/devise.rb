@@ -1,4 +1,5 @@
 require "omniauth-facebook"
+require "omniauth-google-oauth2"
 #OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE if Rails.env.development? 
 
 # Use this hook to configure devise mailer, warden hooks and so forth.
@@ -7,12 +8,14 @@ Devise.setup do |config|
   # ==> Mailer Configuration
   # Configure the e-mail address which will be shown in Devise::Mailer,
   # note that it will be overwritten if you use your own mailer class with default "from" parameter.
+  
   config.mailer_sender = "please-change-me-at-config-initializers-devise@example.com"
 
   config.warden do |manager|
     manager.failure_app = CustomFailure
   end
 
+  # There must be an easier way to do this then to register two different apps.
   if Rails.env.production?
     config.omniauth :facebook, "294194807346006", "2ce6cc90709fcf26821dd350e7a74f50"
     config.omniauth :linkedin, "gu351trlq2ca", "JtBnSqcLBuyMgkf6",
@@ -24,6 +27,9 @@ Devise.setup do |config|
           :scope => 'r_fullprofile r_emailaddress r_network', 
           :fields => ["id", "email-address", "first-name", "last-name", "headline", "industry", "picture-url", "public-profile-url", "location", "connections"] 
   end
+  
+  config.omniauth :google_oauth2, "344761045805-4hjip9h55tl8kfnbk8mp8o05cmicvj38.apps.googleusercontent.com", "bwN2vLFkFclcX6_bNbJfaAl4", { 
+      :scope => "drive.file, userinfo.email, userinfo.profile, plus.me, http://gdata.youtube.com", :access_type => "offline", :approval_prompt => "force" }
 
   # Configure the class responsible to send e-mails.
   # config.mailer = "Devise::Mailer"
