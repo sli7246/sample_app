@@ -147,7 +147,7 @@ if (window.location.pathname.indexOf("appointments") !== -1) {
 			document.getElementById(id).style.display = 'none';
 		}
 		
-		// connect();
+		connect();
 	    var realtimeLoader = new rtclient.RealtimeLoader(realtimeOptions);
 	    realtimeLoader.start();
     }

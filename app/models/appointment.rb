@@ -97,9 +97,9 @@ class Appointment < ActiveRecord::Base
   def set_opentok_session(requestip, override = false)
     if self.opentok_session.nil? || (Time.now - updated_at)/(1.hour) > 12 || override
       # Create OpenTok session and token
-      # @session_id = OTSDK.createSession( request.ip )      
+      # @session_id = OPENTOK_SDK.createSession( request.ip )      
       sessionProperties = {OpenTok::SessionPropertyConstants::P2P_PREFERENCE => "disabled"}    # or disabled
-      self.opentok_session = OTSDK.createSession( requestip, sessionProperties ).session_id
+      self.opentok_session = OPENTOK_SDK.createSession( requestip, sessionProperties ).session_id
       self.save!
     end
     

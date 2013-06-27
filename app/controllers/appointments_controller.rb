@@ -19,7 +19,7 @@ class AppointmentsController < ApplicationController
     
     # Handle all OpenTok variables
     @appointment.set_opentok_session(request.ip)
-    @token = OTSDK.generateToken :session_id => @appointment.session_id
+    @token = OPENTOK_SDK.generateToken :session_id => @appointment.session_id
     
     
     # Test Code
@@ -102,9 +102,9 @@ private
 
 def refresh_token
   data = {
-    :client_id => "344761045805-4hjip9h55tl8kfnbk8mp8o05cmicvj38.apps.googleusercontent.com",
-    :client_secret => "bwN2vLFkFclcX6_bNbJfaAl4",
-    :refresh_token => "1/md4pZQURfcQUnDcptFDGFlSCYuX__aTnYZrN1MGOTto",
+    :client_id => GOOGLE_CLIENT_ID,
+    :client_secret => GOOGLE_CLIENT_SECRET,
+    :refresh_token => GOOGLE_REFRESH_TOKEN,
     :grant_type => "refresh_token"
   }
   @response = ActiveSupport::JSON.decode(RestClient.post "https://accounts.google.com/o/oauth2/token", data)

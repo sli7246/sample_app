@@ -3,40 +3,37 @@
   
   <!-- handle chat boxes -->
   <aside class="span6">	
-  	<!-- load current user
+  	<!-- load current user -->
   	<h4><%= current_user.name %></h4>
   	<div id="opentok_console"></div>
 	<div id="myCamera" class="publisherContainer"></div>
 	<div class="opentok_loading_div" id="user1_loading">
 		<img class="opentok_loading_img" src="/assets/Ajax_Loader_20130610.gif"> 
 		<p class="opentok_loading_msg">Loading your video feed...</p>
-	</div> -->
+	</div>
 	
-	<!-- load appointment partner
+	<!-- load appointment partner -->
   	<h4><%= @other_user.name %></h4>
 	<div id="subscribers"></div>
 	<div class="opentok_loading_div" id="user2_loading">
 		<img class="opentok_loading_img" src="/assets/Ajax_Loader_20130610.gif"> 
 		<p class="opentok_loading_msg">Waiting for <%= @other_user.name %>...</p>
-	</div> -->
+	</div>
   </aside>
   
   <section>
   	<div>
   	  <h4>Whiteboard partition</h4>
-  	  
 		  <!-- Text areas that will be used as our collaborative controls. -->
 		  <canvas class="simple_sketch" id="sketch_editor1" width="420" height="315"></canvas>
-		  <canvas class="simple_sketch" id="sketch_editor2" width="420" height="315"></canvas>
-		  <button id="authorizeButton" disabled>You must authorize</button>	
+		  <!-- ><canvas class="simple_sketch" id="sketch_editor2" width="420" height="315"></canvas> 
+		  <button id="authorizeButton" disabled>You must authorize</button>	-->
 		  <br><br />
 		
-		  <!-- Undo and redo buttons. -->
+		  <!-- Undo and redo buttons.
 		  <button id="undoButton" disabled>Undo</button>
 		  <button id="redoButton" disabled>Redo</button>
-		  
-		  
-		  
+		  -->
 	</div>
 	<div>
   	  <h4>Chat partition</h4>
@@ -47,7 +44,7 @@
 <script type="text/javascript">
 	
 	// OpenTok related keys
-	var apiKey = "<%= API_KEY %>"; // Replace with your API key. See https://dashboard.tokbox.com/projects
+	var apiKey = "<%= OPENTOK_API_KEY %>"; // Replace with your API key. See https://dashboard.tokbox.com/projects
 	var sessionId = "<%=@appointment.opentok_session%>"; // Replace with your own session ID. See https://dashboard.tokbox.com/projects
 	var token = "<%=@token%>"; // Replace with a generated token. See https://dashboard.tokbox.com/projects
 	
@@ -81,84 +78,33 @@
     	
       $(function() {
 		$('#sketch_editor1').sketch('col_obj', col_actions);
-		$('#sketch_editor2').sketch('col_obj', col_actions);
+  		$('#sketch_editor1').data('sketch').redraw();
+		// $('#sketch_editor2').sketch('col_obj', col_actions);
+  		// $('#sketch_editor2').data('sketch').redraw();
 	  });
 	  
 	  // Add event listeners, remember scripting language, method declarations need to come first :(
-	  var alert_me = function(e) {
+	  var update_sketches = function(e) {
   		$('#sketch_editor1').data('sketch').actions = col_actions.asArray();
   		$('#sketch_editor1').data('sketch').redraw();
-  		$('#sketch_editor2').data('sketch').actions = col_actions.asArray();
-  		$('#sketch_editor2').data('sketch').redraw();
+  		// $('#sketch_editor2').data('sketch').actions = col_actions.asArray();
+  		// $('#sketch_editor2').data('sketch').redraw();
 	  }	
 	  	
-      col_actions.addEventListener(gapi.drive.realtime.EventType.VALUES_ADDED, alert_me);	
-      
-      // whiteboard.title = 'FML';	
-
-      // var textArea1 = document.getElementById('editor1');
-      
-      // textArea1.value = whiteboard.title;
-      
-      // Assign 2 event listeners as Binding doesn't seem to automatically create one.
-      // var textArea2 = document.getElementById('editor2');
-      
-      // var updateTextArea1 = function(e) {
-      //   textArea1.value = whiteboard.title;
-      // };
-      // var updateTextArea2 = function(e) {
-      //   textArea2.value = whiteboard.title;
-      // };
-      
-      // Add event listeners, remember scripting language, method declarations need to come first :(
-      // whiteboard.addEventListener(gapi.drive.realtime.EventType.VALUE_CHANGED, updateTextArea1);	
-      // whiteboard.addEventListener(gapi.drive.realtime.EventType.VALUE_CHANGED, updateTextArea2);	
-      
-      // Handle UI interface
-      // textArea1.onkeyup = function() {
-      // 	whiteboard.title = textArea1.value;
-      // }
-      // textArea2.onkeyup = function() {
-      //   whiteboard.title = textArea2.value;
-      // };
-      // updateTextArea2();
-
-      // Enabling UI Elements.
-      // textArea1.disabled = false;
-      // textArea2.disabled = false;
-
-      // Add logic for undo button.
-      /* var model = doc.getModel();      
-      var undoButton = document.getElementById('undoButton');
-      var redoButton = document.getElementById('redoButton');
-
-      undoButton.onclick = function(e) {
-        model.undo();
-      };
-      redoButton.onclick = function(e) {
-        model.redo();
-      };
-
-      // Add event handler for UndoRedoStateChanged events.
-      var onUndoRedoStateChanged = function(e) {
-        undoButton.disabled = !e.canUndo;
-        redoButton.disabled = !e.canRedo;
-      };
-      model.addEventListener(gapi.drive.realtime.EventType.UNDO_REDO_STATE_CHANGED, onUndoRedoStateChanged);
-      */
+      col_actions.addEventListener(gapi.drive.realtime.EventType.VALUES_ADDED, update_sketches);	
     }
- 
-	// Simple Canvas Drawing App
-	// $(function() {
-	//	$('#sketch_editor').sketch();
-	// });
 	
     var realtimeOptions = {
-      clientId: '344761045805-4hjip9h55tl8kfnbk8mp8o05cmicvj38.apps.googleusercontent.com',
+      clientId: "<%= GOOGLE_CLIENT_ID %>",
       authButtonElementId: 'authorizeButton',
       initializeModel: initializeModel,
       autoCreate: true,
-      defaultTitle: "<%= "Appointment_"+@appointment.id.to_s %>",
-      onFileLoaded: onFileLoaded
+      defaultTitle: "<%= "Appointment_Whiteboard"+@appointment.id.to_s %>",
+      onFileLoaded: onFileLoaded,
+      access_token: {	access_token: "<%= @response["access_token"] %>",
+      					token_type: "<%= @response["token_type"] %>",
+      					expires_in: "<%= @response["expires_in"] %>",
+      					id_token: "<%= @response["id_token"] %>"
+      				}
     }
 </script>

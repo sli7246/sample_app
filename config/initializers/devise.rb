@@ -27,9 +27,9 @@ Devise.setup do |config|
           :scope => 'r_fullprofile r_emailaddress r_network', 
           :fields => ["id", "email-address", "first-name", "last-name", "headline", "industry", "picture-url", "public-profile-url", "location", "connections"] 
   end
-  
-  config.omniauth :google_oauth2, "344761045805-4hjip9h55tl8kfnbk8mp8o05cmicvj38.apps.googleusercontent.com", "bwN2vLFkFclcX6_bNbJfaAl4", { 
-      :scope => "drive.file, userinfo.email, userinfo.profile, plus.me, http://gdata.youtube.com", :access_type => "offline", :approval_prompt => "force" }
+ 
+  config.omniauth :google_oauth2, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, { 
+      scope:"drive.file, userinfo.email, userinfo.profile, plus.me, http://gdata.youtube.com", access_type:"offline", approval_prompt:"force"}
 
   # Configure the class responsible to send e-mails.
   # config.mailer = "Devise::Mailer"
