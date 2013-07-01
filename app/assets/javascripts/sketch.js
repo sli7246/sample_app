@@ -245,12 +245,17 @@ var __slice = Array.prototype.slice;
       return $.sketch.tools.marker.onEvent.call(this, e);
     },
     draw: function(action) {
-      var oldcomposite;
+    	
+      // Commenting out the below code as we're not using composites right now. 
+      // In the long run will likely need to switch to composite usage.
+      	
+      /* var oldcomposite;
       oldcomposite = this.context.globalCompositeOperation;
-      this.context.globalCompositeOperation = "copy";
-      action.color = "rgba(0,0,0,0)";
-      $.sketch.tools.marker.draw.call(this, action);
-      return this.context.globalCompositeOperation = oldcomposite;
+      this.context.globalCompositeOperation = "source-over"; */
+      action.color = "#FFFFFF";
+      action.size = 50;
+      return $.sketch.tools.marker.draw.call(this, action);
+      /* return this.context.globalCompositeOperation = oldcomposite; */
     }
   };
 })(jQuery);

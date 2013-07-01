@@ -147,8 +147,14 @@ if (window.location.pathname.indexOf("appointments") !== -1) {
 			document.getElementById(id).style.display = 'none';
 		}
 		
+		// Connect to OpenTok Sessions
 		connect();
+		
+		// Connect the Whiteboard
 	    var realtimeLoader = new rtclient.RealtimeLoader(realtimeOptions);
 	    realtimeLoader.start();
+	    
+	    
+	    
     }
 }
