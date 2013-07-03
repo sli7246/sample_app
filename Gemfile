@@ -15,6 +15,10 @@ gem 'omniauth'
 gem 'omniauth-facebook'
 gem 'omniauth-linkedin'
 
+# Profile
+gem 'paperclip'
+gem 'aws-sdk'
+
 # Data Picker
 gem 'bootstrap-datepicker-rails'
 gem 'jquery-timepicker-rails'

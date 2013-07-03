@@ -153,8 +153,5 @@ if (window.location.pathname.indexOf("appointments") !== -1) {
 		// Connect the Whiteboard
 	    var realtimeLoader = new rtclient.RealtimeLoader(realtimeOptions);
 	    realtimeLoader.start();
-	    
-	    
-	    
     }
 }

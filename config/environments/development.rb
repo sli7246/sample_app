@@ -6,6 +6,16 @@ SampleApp::Application.configure do
   # since you don't have to restart the web server when you make code changes.
   config.cache_classes = false
 
+  
+  config.paperclip_defaults = {
+    :storage => :s3,
+    :s3_credentials => {
+      :bucket => ENV['AWS_BUCKET'],
+      :access_key_id => ENV['AWS_ACCESS_KEY_ID'],
+      :secret_access_key => ENV['AWS_SECRET_ACCESS_KEY']
+    }
+  }
+
   # Log error messages when you accidentally call methods on nil.
   config.whiny_nils = true
 
