@@ -16,18 +16,11 @@ Devise.setup do |config|
   end
 
   # There must be an easier way to do this then to register two different apps.
-  if Rails.env.production?
-    config.omniauth :facebook, "294194807346006", "2ce6cc90709fcf26821dd350e7a74f50"
-    config.omniauth :linkedin, "gu351trlq2ca", "JtBnSqcLBuyMgkf6",
+  config.omniauth :facebook, FACEBOOK_API_KEY, FACEBOOK_API_SECRET
+  config.omniauth :linkedin, LINKEDIN_API_KEY, LINKEDIN_API_SECRET,
           :scope => 'r_fullprofile r_emailaddress r_network', 
           :fields => ["id", "email-address", "first-name", "last-name", "headline", "industry", "picture-url", "public-profile-url", "location", "connections"] 
-  else 
-    config.omniauth :facebook, "608175229201766", "f3d0b4f3bfbd4c3c0e3f20220dbcd24a"
-    config.omniauth :linkedin, "dr5rz1elc9dz", "tjwSQRVFlKj3k4sV",
-          :scope => 'r_fullprofile r_emailaddress r_network', 
-          :fields => ["id", "email-address", "first-name", "last-name", "headline", "industry", "picture-url", "public-profile-url", "location", "connections"] 
-  end
- 
+  
   config.omniauth :google_oauth2, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, { 
       scope:"drive.file, userinfo.email, userinfo.profile, plus.me, http://gdata.youtube.com", access_type:"offline", approval_prompt:"force"}
 
