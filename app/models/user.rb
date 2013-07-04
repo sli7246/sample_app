@@ -18,7 +18,8 @@ class User < ActiveRecord::Base
          :omniauthable, :omniauth_providers => [:facebook, :linkedin]#, :google_oauth2]
 
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :email, :name, :password, :password_confirmation, :remember_me, :facebookuid, :linkedinuid, :nativelogin, :time_zone
+  attr_accessible :email, :name, :password, :password_confirmation, :remember_me, :facebookuid, :linkedinuid, :nativelogin, :time_zone,
+         :avatar
  
   has_many :microposts, dependent: :destroy
   
@@ -34,6 +35,12 @@ class User < ActiveRecord::Base
   has_many :appointments, foreign_key: "user_one_id", dependent: :destroy
   has_many :reverse_appointments, foreign_key: "user_two_id", class_name: "Appointment", dependent: :destroy
   #has_many :meeting_user_two, through: :appointments, source: :user_two
+  
+  has_attached_file :avatar, styles: {
+    thumb: '100x100>',
+    square: '200x200#',
+    medium: '300x300>'
+  }
   
   before_save { email.downcase! }
   before_save :create_remember_token

@@ -1,4 +1,9 @@
-<!-- Start Realtime when the body has loaded. -->
+
+<% content_for(:head) do %>
+    <%= javascript_include_tag "appointments/appointment" %>
+<% end %>
+
+
 <div class="row">
   
   <!-- handle chat boxes -->
@@ -53,6 +58,7 @@
 	var token = "<%=@token%>"; // Replace with a generated token. See https://dashboard.tokbox.com/projects
 	
 	var col_actions;
+	
 	 /**
      * This function is called the first time that the Realtime model is created
      * for a file. This function should be used to initialize any values of the
@@ -62,8 +68,6 @@
      * @param model {gapi.drive.realtime.Model} the Realtime root model object.
      */
   
-    // WhiteBoard = function(){}
-    
     function initializeModel(model) {
       var Col_Actions = model.createList();
       model.getRoot().set('col_actions', Col_Actions);

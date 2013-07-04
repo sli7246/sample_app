@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_filter :authenticate_user!, only: [:index, :edit, :destroy, :following, :followers]
+  before_filter :authenticate_user!, only: [:index, :edit, :destroy, :following, :followers, :update]
   before_filter :correct_user,   only: [:edit, :update]
   before_filter :admin_user,     only: :destroy
 
@@ -53,6 +53,18 @@ class UsersController < ApplicationController
           redirect_to(session[:return_to] || root_url)
        }
       #format.js
+    end
+  end
+ 
+  # Need to update this function. 
+  def update
+    #raise params[:user].to_yaml
+    if  @user.update_attribute(:avatar, params[:user][:avatar])
+      flash[:success] = "Profile updated"
+      redirect_to @user
+    else 
+      flash[:notice] = "Something went wrong, please contact us if this error persists"
+      redirect_to @user
     end
   end
   
