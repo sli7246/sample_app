@@ -1,39 +1,41 @@
+<% content_for(:head) do %>
+    <%= javascript_include_tag "jcrop/jquery.Jcrop.min" %>
+    <%= javascript_include_tag "profile/update_profile" %>
+    <%= stylesheet_link_tag "jcrop/jquery.Jcrop.min" %>
+<% end %>
+
 <% provide(:title, "Edit user") %> 
 <h1>Update your profile</h1>
 
 <div class="row">
-  <div class="span6 offset3">
-    <%= form_for(@user) do |f| %>
-      <%= f.label :profile_picture %>
-	  <%= f.file_field :avatar %>
-		
-      
-
-      
-      <%= f.submit "Save changes", class: "btn btn-medium btn-primary" %>
+  <div class="span8 offset2">
+  	<section id="photo_section">
+	  	<div class= "span4" id="current_profile_photo">
+	  		<% if @user.avatar.exists? %>
+	  			<!-- Use default gavatar/facebook/linkedin photos if no custom uploaded file exists -->
+	  			<%= image_tag @user.avatar.url(:medium) %>
+	  		<% else %>
+	    		<%= gravatar_for @user %>
+	  		<% end %>
+	  	</div>
+	  	<div class= "span4">
+	  		<h4>Follow the below steps to change your profile picture</h4>
+	    	<%= form_for(@user) do |f| %>
+	      		<h5>Step1: Please select image file</h5>
+		    	<%= f.file_field :avatar %>
+		</div>
+	</section>
+	<section id="crop_section">
+		<div id="crop_div">
+			<h5 id="crop_reference">Step2: Please select the image partition you would like to use</h5>
+		</div>
+ 	</section>
+ 	
+	<% for attribute in [:crop_x, :crop_y, :crop_w, :crop_h] %>
+		<%= f.hidden_field attribute, :id => attribute %>
+	<% end %>
+	
+    <%= f.submit "Crop", class: "btn btn-small btn-primary", :id => "submit_profile_picture" %>
     <% end %>
-    <!--
-    <%= gravatar_for @user %>
-    <a href="http://gravatar.com/emails">change</a>
-  	-->
-  </div>
+   </div>
 </div>
-
-<script>
-	// Upload preview for user to select face before final upload
-
-	$('#user_avatar').change(function(e) {
-	    for (var i = 0; i < document.getElementById('user_avatar').files.length; i++) {
-	        
-	        var file = document.getElementById('user_avatar').files[i];
-	        
-	        var img = document.createElement("img");
-	        var reader = new FileReader();
-	        reader.onloadend = function() {
-	             img.src = reader.result;
-	        }
-	        reader.readAsDataURL(file);
-	        $('#user_avatar').after(img);
-	    }
-	});
-</script>

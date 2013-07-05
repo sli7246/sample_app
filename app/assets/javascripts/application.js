@@ -15,5 +15,4 @@
 //= require bootstrap
 //= require bootstrap-datepicker/core
 //= require jquery.timepicker.js
-//= require_tree ../../../vendor/assets/javascripts/.
 //= require_tree ./app_wide

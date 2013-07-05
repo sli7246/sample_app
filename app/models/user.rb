@@ -19,8 +19,28 @@ class User < ActiveRecord::Base
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :name, :password, :password_confirmation, :remember_me, :facebookuid, :linkedinuid, :nativelogin, :time_zone,
-         :avatar
+         :avatar, :crop_x, :crop_y, :crop_w, :crop_h
+  attr_accessor :crop_x, :crop_y, :crop_w, :crop_h
  
+  # Set up Validations
+  validates :name, presence: true, length: { maximum: 50 }
+  VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
+  validates :email, presence: true, 
+    format: { with: VALID_EMAIL_REGEX }, 
+    uniqueness: { case_sensitive: false }
+  
+  def password_validation_required?
+    :encrypted_password.nil? || !@password.blank? || !@password_confirmation.blank?
+  end
+    
+  # Password validations update  
+  validates :password, presence: true, length: { minimum: 8 },
+    :if => :password_validation_required?
+  validates :password_confirmation, presence: true,
+    :if => :password_validation_required?
+    
+  validates_inclusion_of :time_zone, :in => ActiveSupport::TimeZone.zones_map { |m| m.name }, :message => "is not a valid Time Zone", :allow_nil => true
+  
   has_many :microposts, dependent: :destroy
   
   # Followers/following Relationship table
@@ -37,23 +57,17 @@ class User < ActiveRecord::Base
   #has_many :meeting_user_two, through: :appointments, source: :user_two
   
   has_attached_file :avatar, styles: {
-    thumb: '100x100>',
+    thumb:  '60x60>',
+    small:  '150x150>',
     square: '200x200#',
-    medium: '300x300>'
-  }
+    medium: '300x300>',
+    large:  '500x500>'
+  }, :processors => [:cropper]
   
   before_save { email.downcase! }
   before_save :create_remember_token
   
-  validates :name, presence: true, length: { maximum: 50 }
-  VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
-  validates :email, presence: true, 
-    format: { with: VALID_EMAIL_REGEX }, 
-    uniqueness: { case_sensitive: false }
-    
-  validates :password, presence: true, length: { minimum: 6 }
-  validates :password_confirmation, presence: true
-  validates_inclusion_of :time_zone, :in => ActiveSupport::TimeZone.zones_map { |m| m.name }, :message => "is not a valid Time Zone", :allow_nil => true
+  # after_update :reprocess_avatar, :if => :cropping?
   
   def set_time_zone!
     #self.time_zone = params[:time_zone]
@@ -208,12 +222,20 @@ class User < ActiveRecord::Base
     end
   end
   
+  def cropping?
+    !crop_x.blank? && !crop_y.blank? && !crop_w.blank? && !crop_h.blank?
+  end
+  
   #LinkedIn authentication methods
   
   private
 
     def create_remember_token
       self.remember_token = SecureRandom.urlsafe_base64
+    end
+    
+    def reprocess_avatar
+      avatar.reprocess!
     end
 end
 

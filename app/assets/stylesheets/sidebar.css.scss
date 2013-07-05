@@ -1,13 +1,19 @@
-@import "main";
-
 /* sidebar */
 
 aside {
+  .profile_picture {
+    float:left;
+    margin: 1px;
+    margin-right: 10px;
+    left: 0px;
+  }
+  
   h1 {
     margin: 0px;
     line-height: 30px;
   }
   section {
+    margin-top: 10px;
     padding: 10px 0;
     border-top: 1px solid $grayLighter;
     &:first-child {

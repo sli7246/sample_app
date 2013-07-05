@@ -9,6 +9,9 @@ SampleApp::Application.configure do
   
   config.paperclip_defaults = {
     :storage => :s3,
+    :use_timestamp => false,
+    :url => ':s3_domain_url',
+    :path => ":attachment/:id/:style.:extension",
     :s3_credentials => {
       :bucket => ENV['AWS_BUCKET'],
       :access_key_id => ENV['AWS_ACCESS_KEY_ID'],

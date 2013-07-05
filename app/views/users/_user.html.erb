@@ -1,8 +1,14 @@
 <li>
-  <%= gravatar_for user, size: 52 %>
-  <%= link_to user.name, user %>
-  <% if current_user.admin? && !current_user?(user) %>
-    | <%= link_to "delete", user, method: :delete,
+ 	<% if user.avatar.exists? %>
+		<!-- Use default gavatar/facebook/linkedin photos if no custom uploaded file exists -->
+		<%= image_tag(user.avatar.url(:thumb), :class => 'gravatar') %>
+	<% else %>
+		<%= gravatar_for user, size: 60%>
+	<% end %>	
+	
+   <%= link_to user.name, user %>
+   <% if current_user.admin? && !current_user?(user) %>
+     | <%= link_to "delete", user, method: :delete,
                                   data: { confirm: "You sure?" } %>
-  <% end %>
+   <% end %>
 </li>

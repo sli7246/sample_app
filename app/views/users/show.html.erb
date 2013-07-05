@@ -3,7 +3,7 @@
   <aside class="span4">
     <section>
       	<h1>
-        	<%= gravatar_for @user %>
+      		<%= render 'shared/profile_picture' %>
         	<%= @user.name %>        	
       	</h1>
     <ul><%= link_to "Edit Profile", edit_user_path %></ul>
