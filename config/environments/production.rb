@@ -13,6 +13,8 @@ SampleApp::Application.configure do
     }
   }
 
+  config.assets.precompile += ['appointments/index.js', 'profile/index.js']
+
   # Code is not reloaded between requests
   config.cache_classes = true
 
