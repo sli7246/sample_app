@@ -13,7 +13,7 @@ SampleApp::Application.configure do
     }
   }
 
-  config.assets.precompile += ['appointments/index.js', 'profiles/index.js', 'jcrop/jquery.Jcrop.css']
+  config.assets.precompile += ['appointments/index.js', 'profiles/index.js', 'jcrop/jquery.Jcrop.min.css']
 
   # Code is not reloaded between requests
   config.cache_classes = true
