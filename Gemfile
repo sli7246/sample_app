@@ -1,5 +1,7 @@
 source 'https://rubygems.org'
 
+gem 'stripe', :git => 'https://github.com/stripe/stripe-ruby'
+gem 'sqlite3'
 gem 'rails', '3.2.13'
 gem 'bootstrap-sass', '2.1'
 gem 'bcrypt-ruby', '3.0.1'

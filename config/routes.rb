@@ -10,6 +10,8 @@ SampleApp::Application.routes.draw do
     match '/signout', to: 'devise/sessions#destroy', via: :delete
   end
 
+  resources :charges
+
   resources :users do
     member do
       get :following, :followers

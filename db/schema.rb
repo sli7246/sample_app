@@ -31,41 +31,6 @@ ActiveRecord::Schema.define(:version => 20130703074426) do
   add_index "appointments", ["user_one_id", "app_date_time"], :name => "index_appointments_on_user_one_id_and_app_date", :unique => true
   add_index "appointments", ["user_two_id", "app_date_time"], :name => "index_appointments_on_user_two_id_and_app_date", :unique => true
 
-  create_table "bigbluebutton_rooms", :force => true do |t|
-    t.integer  "server_id"
-    t.integer  "owner_id"
-    t.string   "owner_type"
-    t.string   "meetingid"
-    t.string   "name"
-    t.string   "attendee_password"
-    t.string   "moderator_password"
-    t.string   "welcome_msg"
-    t.string   "logout_url"
-    t.string   "voice_bridge"
-    t.string   "dial_number"
-    t.integer  "max_participants"
-    t.boolean  "private",             :default => false
-    t.boolean  "randomize_meetingid", :default => true
-    t.boolean  "external",            :default => false
-    t.string   "param"
-    t.datetime "created_at",                             :null => false
-    t.datetime "updated_at",                             :null => false
-  end
-
-  add_index "bigbluebutton_rooms", ["meetingid"], :name => "index_bigbluebutton_rooms_on_meetingid", :unique => true
-  add_index "bigbluebutton_rooms", ["server_id"], :name => "index_bigbluebutton_rooms_on_server_id"
-  add_index "bigbluebutton_rooms", ["voice_bridge"], :name => "index_bigbluebutton_rooms_on_voice_bridge", :unique => true
-
-  create_table "bigbluebutton_servers", :force => true do |t|
-    t.string   "name"
-    t.string   "url"
-    t.string   "salt"
-    t.string   "version"
-    t.string   "param"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
-
   create_table "microposts", :force => true do |t|
     t.string   "content"
     t.integer  "user_id"
@@ -88,12 +53,12 @@ ActiveRecord::Schema.define(:version => 20130703074426) do
 
   create_table "users", :force => true do |t|
     t.string   "name"
-    t.string   "email",                  :default => "", :null => false
-    t.datetime "created_at",                             :null => false
-    t.datetime "updated_at",                             :null => false
+    t.string   "email",                  :default => "",    :null => false
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
     t.string   "remember_token"
-    t.boolean  "admin"
-    t.string   "encrypted_password",     :default => "", :null => false
+    t.boolean  "admin",                  :default => false
+    t.string   "encrypted_password",     :default => "",    :null => false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"

@@ -6,7 +6,9 @@
 development:
   adapter: postgresql
   host: localhost
-  database: sample_app
+  database: postgres
+  username: postgres
+  password: whizium
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -14,11 +16,15 @@ development:
 test:
   adapter: postgresql
   host: localhost
-  database: sample_app_test
+  database: test
+  username: postgres
+  password: whizium
 
 # Heroku automatically generates a Database.yml file. Would prefer below is correct, but can live with this for now.
 production:
-  adapter: sqlite3
+  adapter: postgresql
   database: db/production.sqlite3
   pool: 5
   timeout: 5000
+  username: postgres
+  password: whizium
