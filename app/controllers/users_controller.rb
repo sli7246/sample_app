@@ -58,13 +58,17 @@ class UsersController < ApplicationController
  
   # Need to update this function. 
   def update
-    # raise params[:user].to_s.to_yaml
-    @user.update_attribute(:crop_x, params[:user][:crop_x])
-    @user.update_attribute(:crop_y, params[:user][:crop_y])
-    @user.update_attribute(:crop_h, params[:user][:crop_h])
-    @user.update_attribute(:crop_w, params[:user][:crop_w])
+    # Need this session to ensure 
+    # raise "wtf".to_yaml
     
-    if  @user.update_attribute(:avatar, params[:user][:avatar])
+    if !params[:user][:crop_x].nil? then 
+      @user.update_attribute(:crop_x, params[:user][:crop_x])
+      @user.update_attribute(:crop_y, params[:user][:crop_y])
+      @user.update_attribute(:crop_h, params[:user][:crop_h])
+      @user.update_attribute(:crop_w, params[:user][:crop_w])
+    end
+    
+    if  @user.update_attributes(params[:user])
       flash[:success] = "Profile updated"
       redirect_to @user
     else 

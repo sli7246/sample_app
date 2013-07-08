@@ -18,6 +18,7 @@ gem 'omniauth-linkedin'
 # Profile
 gem 'paperclip'
 gem 'aws-sdk'
+gem 'ckeditor'
 
 # Data Picker
 gem 'bootstrap-datepicker-rails'

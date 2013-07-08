@@ -18,23 +18,32 @@
 	  		<% end %>
 	  	</div>
 	  	<div class= "span4">
-	  		<h4>Follow the below steps to change your profile picture</h4>
-	    	<%= form_for(@user) do |f| %>
-	      		<h5>Step1: Please select image file</h5>
-		    	<%= f.file_field :avatar %>
+	  		<h4>Please select a photo below to begin updating your profile picture...</h4>
+	    	<%= form_for(@user) do |f_picture| %>
+		    	<%= f_picture.file_field :avatar %>
 		</div>
 	</section>
-	<section id="crop_section">
+	
+	<section id="crop_section" style="display:none;">
 		<div id="crop_div">
-			<h5 id="crop_reference">Step2: Please select the image partition you would like to use</h5>
+			<h5 id="crop_reference">Please select the image partition you would like to use</h5>
 		</div>
+ 	
+		<% for attribute in [:crop_x, :crop_y, :crop_w, :crop_h] %>
+			<%= f_picture.hidden_field attribute, :id => attribute %>
+		<% end %>
+	    <%= f_picture.submit "Update", class: "btn btn-small btn-primary submit_profile" %>
+		<input class="btn btn-small submit_profile" id="cancel_button" type="button" value="Cancel" />
+	    <% end %>
+	    
  	</section>
  	
-	<% for attribute in [:crop_x, :crop_y, :crop_w, :crop_h] %>
-		<%= f.hidden_field attribute, :id => attribute %>
-	<% end %>
-	
-    <%= f.submit "Crop", class: "btn btn-small btn-primary", :id => "submit_profile_picture" %>
-    <% end %>
+ 	<section id="blurb_section">
+ 		<h4>or update your written profile below.</h4>
+	    <%= form_for(@user) do |f_blurb| %>
+ 			 <%= f_blurb.cktext_area :profile, :ckeditor => {:uiColor => "#eeeeee", :toolbar => "mini"} %>
+	    	 <%= f_blurb.submit "Update", class: "btn btn-small btn-primary submit_profile" %>
+ 		<% end %>
+ 	</section>	
    </div>
 </div>

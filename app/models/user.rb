@@ -19,7 +19,7 @@ class User < ActiveRecord::Base
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :name, :password, :password_confirmation, :remember_me, :facebookuid, :linkedinuid, :nativelogin, :time_zone,
-         :avatar, :crop_x, :crop_y, :crop_w, :crop_h
+         :avatar, :crop_x, :crop_y, :crop_w, :crop_h, :profile
   attr_accessor :crop_x, :crop_y, :crop_w, :crop_h
  
   # Set up Validations
