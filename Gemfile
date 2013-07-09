@@ -15,6 +15,9 @@ gem 'omniauth'
 gem 'omniauth-facebook'
 gem 'omniauth-linkedin'
 
+# Search
+gem 'sunspot_rails'
+
 # Profile
 gem 'paperclip'
 gem 'aws-sdk'
@@ -43,6 +46,7 @@ group :development, :test do
   gem 'guard-rspec', '1.2.1'
   gem 'guard-spork', :github => 'guard/guard-spork'
   gem 'spork', '0.9.2'
+  gem 'sunspot_solr'
 end
 
 group :development do

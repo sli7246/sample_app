@@ -21,7 +21,16 @@ class UsersController < ApplicationController
   end
   
   def index
-    @users = User.paginate(page: params[:page])
+    if params[:search].present?
+      @search = User.search do
+        fulltext params[:search]
+      end
+      @users = @search.results.paginate(page: params[:page])
+      @header = "Results for '"+params[:search]+"'"
+    else
+      @users = User.paginate(page: params[:page])
+      @header = "All users"
+    end
   end
   
   def destroy
