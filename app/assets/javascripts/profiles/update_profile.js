@@ -11,7 +11,11 @@ window.onload = function() {
 	  $("#crop_h").val(Math.round(coords.h * ratio_height));
 	}
 	
-	$('#user_avatar').change(function(e) {
+	function file_change() {$('#crop_section').show();
+		$('#photo_section').hide();
+		$('#blurb_section').hide();
+		
+		
 		if (typeof jcrop_api != 'undefined') {
 	        jcrop_api.destroy();	
 			$('#crop_box').remove();
@@ -49,5 +53,28 @@ window.onload = function() {
 	    };
 	    reader.readAsDataURL(file);  
 	    $('#crop_reference').after(img);
-	});	
+	}
+	
+	$('#cancel_button').click(function() {
+		$('#crop_section').hide();
+		$('#photo_section').show();
+		$('#blurb_section').show();
+		
+		var oldInput = document.getElementById("user_avatar"); 
+     
+	    var newInput = document.createElement("input"); 
+	     
+	    newInput.type = "file"; 
+	    newInput.id = oldInput.id; 
+	    newInput.name = oldInput.name; 
+	    newInput.className = oldInput.className; 
+	    newInput.style.cssText = oldInput.style.cssText; 
+	    // copy any other relevant attributes 
+	     
+	    oldInput.parentNode.replaceChild(newInput, oldInput);
+	    
+		$('#user_avatar').change(file_change);	
+	});
+	
+	$('#user_avatar').change(file_change);	
 }

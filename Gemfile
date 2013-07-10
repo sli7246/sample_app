@@ -1,7 +1,6 @@
 source 'https://rubygems.org'
 
 gem 'stripe', :git => 'https://github.com/stripe/stripe-ruby'
-gem 'sqlite3'
 gem 'rails', '3.2.13'
 gem 'bootstrap-sass', '2.1'
 gem 'bcrypt-ruby', '3.0.1'
@@ -17,9 +16,13 @@ gem 'omniauth'
 gem 'omniauth-facebook'
 gem 'omniauth-linkedin'
 
+# Search
+gem 'sunspot_rails'
+
 # Profile
 gem 'paperclip'
 gem 'aws-sdk'
+gem 'ckeditor'
 
 # Data Picker
 gem 'bootstrap-datepicker-rails'
@@ -44,6 +47,7 @@ group :development, :test do
   gem 'guard-rspec', '1.2.1'
   gem 'guard-spork', :github => 'guard/guard-spork'
   gem 'spork', '0.9.2'
+  gem 'sunspot_solr'
 end
 
 group :development do

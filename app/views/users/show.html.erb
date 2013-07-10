@@ -6,7 +6,8 @@
       		<%= render 'shared/profile_picture' %>
         	<%= @user.name %>        	
       	</h1>
-    <ul><%= link_to "Edit Profile", edit_user_path %></ul>
+    <ul><%= link_to "Edit My Profile", edit_user_path if current_user?(@user) %></ul>
+    <%= render 'users/relationship_support/follow_form' if user_signed_in? %>
     </section>
     <section>
       	<%= render 'shared/stats' %>
@@ -16,11 +17,15 @@
   </aside> 
   <!-- Right partition -->
   <section>
-    <%= render 'users/relationship_support/follow_form' if user_signed_in? %>
   <div class="span8">
   	<%= render 'appointments/book_appointment'%>
   </div>    
   <div class="span8">
+  	<% unless @user.profile.nil? %>
+  		<h3>About <%= @user.name %></h3>
+  		<%= raw @user.profile %>
+  	<% end %>
+  	
     <% if @user.microposts.any? %>
       <h3>Microposts (<%= @user.microposts.count %>)</h3>
       <ol class="microposts">

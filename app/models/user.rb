@@ -1,14 +1,3 @@
-# == Schema Information
-#
-# Table name: users
-#
-#  id         :integer          not null, primary key
-#  name       :string(255)
-#  email      :string(255)
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#
-
 class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :token_authenticatable, :confirmable,
@@ -19,7 +8,7 @@ class User < ActiveRecord::Base
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :name, :password, :password_confirmation, :remember_me, :facebookuid, :linkedinuid, :nativelogin, :time_zone,
-         :avatar, :crop_x, :crop_y, :crop_w, :crop_h
+         :avatar, :crop_x, :crop_y, :crop_w, :crop_h, :profile
   attr_accessor :crop_x, :crop_y, :crop_w, :crop_h
  
   # Set up Validations
@@ -56,6 +45,13 @@ class User < ActiveRecord::Base
   has_many :reverse_appointments, foreign_key: "user_two_id", class_name: "Appointment", dependent: :destroy
   #has_many :meeting_user_two, through: :appointments, source: :user_two
   
+  # Profile search based on user blurb and name (Preliminary)
+  searchable do
+    text :name, :boost => 5
+    text :profile
+  end
+  
+  # Profile picture powered by paperclip
   has_attached_file :avatar, styles: {
     thumb:  '60x60>',
     small:  '150x150>',
