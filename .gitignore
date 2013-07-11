@@ -7,6 +7,7 @@
 # Ignore all logfiles and tempfiles.
 /log/*.log
 /tmp
+/solr/data/
 
 # Ignore other unneeded files.
 doc/
