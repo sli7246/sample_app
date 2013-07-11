@@ -15,6 +15,9 @@ gem 'omniauth'
 gem 'omniauth-facebook'
 gem 'omniauth-linkedin'
 
+# Mail
+gem 'actionmailer'
+
 # Search
 gem 'sunspot_rails'
 

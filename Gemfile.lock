@@ -290,6 +290,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  actionmailer
   activemerchant
   annotate (= 2.5.0)
   aws-sdk
