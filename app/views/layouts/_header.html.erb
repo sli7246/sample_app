@@ -1,12 +1,18 @@
 <header class="navbar navbar-fixed-top navbar-inverse">
   <div class="navbar-inner">
     <div class="container">
+    	
+      <div class= "span5" id="logo_box">
       <%= link_to "sample app", root_path, id: "logo" %>
+      <br></br>
+      <% if user_signed_in? && !@booked_appointments.nil?%>
+      	<a href="#" onclick="myFunction()"><span id="timer"></span></a>
+      <% end %>
+      </div>
+      
+      
       <nav>
         <ul class="nav pull-right">
-          <% if user_signed_in? && !@booked_appointments.nil?%>
-          	<li><a href="#" onclick="myFunction()"><span id="timer"></span></a></li>
-          <% end %>
           <li><%= link_to "Home", root_path %></li>
           <li><%= link_to "Help", help_path %></li>
           <% if user_signed_in? %>
@@ -35,6 +41,8 @@
 		  </div>
         </ul>
       </nav>
+      
+      
     </div>
   </div>
 </header>
@@ -67,8 +75,12 @@
 		 window.open('http://localhost:3000/users','_parent');	
 	     return;
 	  }
-	  document.getElementById("timer").innerHTML = (days_remaining >= 1) ? "Your next chat is on " + next_appointment_date :
+	  
+	  var timer_string = (days_remaining >= 1) ? "Your next chat is on " + next_appointment_date :
 	  			"Your next chat will begin in "+hours_remaining+":"+minutes_remaining+":"+seconds_remaining;
+	  			
+	  $('#timer').html(timer_string);
+	  $('body').css("padding-top", 80);			
 	}
 	</script>
 <% end %>

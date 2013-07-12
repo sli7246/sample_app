@@ -1,8 +1,8 @@
 <ol>
 	<section>
-	<% partner = current_user?(proposed_appointment.user_one) ? proposed_appointment.user_two : proposed_appointment.user_one %>
+		<% partner = current_user?(proposed_appointment.user_one) ? proposed_appointment.user_two : proposed_appointment.user_one %>
 	<div class= "meeting_gavatar span1">
-		<%= link_to gravatar_for(partner), partner%>
+		<%= render :partial => 'shared/profile_picture',locals: {   :partial_user => partner, :partial_size => :thumb} %>
 	</div>
 	
 	<div class= "meeting_content span4" id= <%= "app_#{proposed_appointment.id}_comment" %>>
