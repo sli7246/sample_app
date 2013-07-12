@@ -4,7 +4,7 @@ describe Appointment do
   let(:user_one) { FactoryGirl.create(:user) }
   let(:user_two) { FactoryGirl.create(:user) }
   let(:appointment) { user_one.appointments.build( user_two_id:user_two.id, app_date:"1/12/2023".to_date, app_time:Time.new("2:30PM")) }
-  
+
   subject { appointment }
   
   describe "accessible attributes" do

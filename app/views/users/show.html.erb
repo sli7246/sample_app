@@ -3,7 +3,7 @@
   <aside class="span4">
     <section>
       	<h1>
-      		<%= render 'shared/profile_picture' %>
+			<%= render :partial => 'shared/profile_picture',locals: {   :partial_user => @user, :partial_size => :small} %>
         	<%= @user.name %>        	
       	</h1>
     <ul><%= link_to "Edit My Profile", edit_user_path if current_user?(@user) %></ul>

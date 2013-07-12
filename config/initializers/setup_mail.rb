@@ -9,5 +9,4 @@ ActionMailer::Base.smtp_settings = {
   :domain         => 'heroku.com',
   :enable_starttls_auto => true
 }
-
-ActionMailer::Base.register_interceptor(DevelopmentMailInterceptor) if Rails.env.development?
+ActionMailer::Base.register_interceptor(DevelopmentMailInterceptor) if !Rails.env.production?

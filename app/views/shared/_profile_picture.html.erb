@@ -1,6 +1,6 @@
-<% if @user.avatar.exists? %>
+<% if partial_user.avatar.exists? %>
 	<!-- Use default gavatar/facebook/linkedin photos if no custom uploaded file exists -->
-	<%= image_tag @user.avatar.url(:small), :class => 'profile_picture' %>
+	<%= image_tag partial_user.avatar.url(partial_size), :class => 'profile_picture' %>
 <% else %>
-	<%= gravatar_for @user, :class => 'profile_picture' %>
+	<%= gravatar_for partial_user, :class => 'profile_picture', size: partial_size == :thumb ? 60 : :tiny ? 30: 100 %>
 <% end %>

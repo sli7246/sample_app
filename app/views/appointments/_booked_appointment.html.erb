@@ -1,15 +1,9 @@
 <ol>
-  	<% if current_user?(booked_appointment.user_one) %>
-  		<%= link_to gravatar_for(booked_appointment.user_two), booked_appointment.user_two %>
-		<span class="user">
-  		<%= link_to booked_appointment.user_two.name, booked_appointment.user_two %>
-  		</span>
-	<% else %>  
-  		<%= link_to gravatar_for(booked_appointment.user_one), booked_appointment.user_one %>
-		<span class="user">
-  		<%= link_to booked_appointment.user_one.name, booked_appointment.user_one %>
-  		</span>
-  	<% end %>
+	<% relevant_user = current_user?(booked_appointment.user_one) ? booked_appointment.user_two : booked_appointment.user_one %>
+	<%= render :partial => 'shared/profile_picture',locals: {   :partial_user => relevant_user, :partial_size => :thumb} %>
+	<span class="user">
+		<%= link_to relevant_user.name, relevant_user %>
+	</span>
 
   	<span class="content">On <%= booked_appointment.display_app_date_time(booked_appointment.app_date_time, current_user.time_zone) %></span>
   	<span class="timestamp">

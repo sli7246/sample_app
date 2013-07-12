@@ -1,11 +1,5 @@
 <li>
- 	<% if user.avatar.exists? %>
-		<!-- Use default gavatar/facebook/linkedin photos if no custom uploaded file exists -->
-		<%= image_tag(user.avatar.url(:thumb), :class => 'gravatar') %>
-	<% else %>
-		<%= gravatar_for user, size: 60%>
-	<% end %>	
-	
+   <%= render :partial => 'shared/profile_picture',locals: {   :partial_user => user, :partial_size => :thumb} %>
    <%= link_to user.name, user %>
    <% if current_user.admin? && !current_user?(user) %>
      | <%= link_to "delete", user, method: :delete,

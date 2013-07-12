@@ -100,20 +100,26 @@ input {
 }
 
 /* header */
-
-#logo {
-  float: left;
-  margin-right: 10px;
-  font-size: 1.7em;
-  color: white;
-  text-transform: uppercase;
-  letter-spacing: -1px;
-  padding-top: 9px;
-  font-weight: bold;
-  line-height: 1;
-  &:hover {
+#logo_box {
+  margin: 0px;
+  margin-bottom: 5px;
+  a {
+    color: #999999;
+  }
+  #logo {
+    float: left;
+    margin-right: 10px;
+    font-size: 1.7em;
     color: white;
-    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: -1px;
+    padding-top: 9px;
+    font-weight: bold;
+    line-height: 1;
+    &:hover {
+      color: white;
+      text-decoration: none;
+    }
   }
 }
 
@@ -184,7 +190,7 @@ footer {
   }
 }
  
-.gravatar {
+.profile_picture {
   float: left;
   margin-right: 10px;
 }

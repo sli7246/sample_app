@@ -53,6 +53,7 @@ class User < ActiveRecord::Base
   
   # Profile picture powered by paperclip
   has_attached_file :avatar, styles: {
+    tiny: '30x30#',
     thumb:  '60x60>',
     small:  '150x150>',
     square: '200x200#',
