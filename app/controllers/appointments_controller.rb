@@ -21,7 +21,6 @@ class AppointmentsController < ApplicationController
     @appointment.set_opentok_session(request.ip)
     @token = OPENTOK_SDK.generateToken :session_id => @appointment.session_id
     
-    
     # Test Code
     refresh_token
   end
@@ -40,7 +39,9 @@ class AppointmentsController < ApplicationController
     proposed_times[2] = DateTime.strptime(params[:appointment][:prop_three_app_date] + " " + params[:appointment][:prop_three_app_time], "%m/%d/%Y %l:%M%p") - timezone_offset_sec
     
     current_user.propose_appointment!(@user, proposed_times[0], proposed_times[1], proposed_times[2], params[:appointment][:app_introduction])
-    AppointmentMailer.appointment_proposal(current_user, @user)
+    # raise AppointmentMailer.appointment_proposal(current_user, @user).to_yaml
+    
+    AppointmentMailer.appointment_proposal(current_user, @user).deliver
     
     respond_to do |format|
       format.html { redirect_to @user}  
