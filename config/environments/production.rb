@@ -80,5 +80,5 @@ SampleApp::Application.configure do
   # config.active_record.auto_explain_threshold_in_seconds = 0.5
   
   # Default mailer URL
-  config.action_mailer.default_url_options = { :host => 'http://riotous-springs-8992.herokuapp.com'}
+  config.action_mailer.default_url_options = { :host => 'https://riotous-springs-8992.herokuapp.com'}
 end
