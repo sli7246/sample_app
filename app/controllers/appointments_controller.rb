@@ -80,6 +80,9 @@ class AppointmentsController < ApplicationController
     else
       flash[:success] = "Congratulations! You have successfully booked the appointment."
       @appointment.update_attributes(:app_date_time => params[:appointment][:app_date_time], :app_accepted => true)
+      
+      AppointmentMailer.appointment_proposal(current_user, @user, @appointment).deliver
+      
       redirect_to root_url
     end
   end
