@@ -37,6 +37,21 @@ class Appointment < ActiveRecord::Base
   
   after_initialize :get_datetimes # convert db format to accessors
   before_validation :set_datetimes # convert accessors back to db format
+
+  def book_appointment(booked_date_time)
+    # Save the appointment in the database
+    self.update_attributes(:app_date_time => booked_date_time, :app_accepted => true)
+    
+    # Mail confirms to both users
+    AppointmentMailer.appointment_confirmation(self.user_one, self.user_two, self).deliver
+    AppointmentMailer.appointment_confirmation(self.user_two, self.user_one, self).deliver
+  end
+
+  def display_app_date_time(app_date_time, time_zone)  
+    app_utc_time = app_date_time + ActiveSupport::TimeZone[time_zone].utc_offset.seconds    
+    
+    app_utc_time.strftime('%b %d, %Y') +" at " + app_utc_time.strftime('%l:%M %p')
+  end
   
   def get_datetimes
     
@@ -87,12 +102,6 @@ class Appointment < ActiveRecord::Base
                                                     prop_three_app_time.min)
     end
   end 
-
-  def display_app_date_time(app_date_time, time_zone)  
-    app_utc_time = app_date_time + ActiveSupport::TimeZone[time_zone].utc_offset.seconds    
-    
-    app_utc_time.strftime('%b %d, %Y') +" at " + app_utc_time.strftime('%l:%M %p')
-  end
   
   def set_opentok_session(requestip, override = false)
     if self.opentok_session.nil? || (Time.now - updated_at)/(1.hour) > 12 || override

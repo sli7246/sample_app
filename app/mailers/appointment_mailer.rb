@@ -11,9 +11,9 @@ class AppointmentMailer < ActionMailer::Base
   def appointment_confirmation(proposer, target, appointment)
     @target = target
     @proposer = proposer
-    @appointment = appointment
+    
+    @appointment_time = appointment.display_app_date_time(appointment.app_date_time, @target.time_zone)
     
     mail(:to => "#{@target.name} <#{@target.email}>", :subject => "Congratulations! Your appointment with #{@proposer.name} has been booked!")
-    mail(:to => "#{@proposer.name} <#{@proposer.email}>", :subject => "Congratulations! Your appointment with #{@target.name} has been booked!")
   end
 end
