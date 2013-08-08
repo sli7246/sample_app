@@ -222,11 +222,11 @@ describe User do
   
   describe "proposing appointment" do
     let(:other_user) { FactoryGirl.create(:user) } 
-    let(:prop_one_time)     { Time.new(2013, 7, 24, 
+    let(:prop_one_time)     { Time.new(2023, 7, 24, 
                                  10, 30, 0, "+00:00") - 0} 
-    let(:prop_two_time)     { Time.new(2013, 7, 24, 
+    let(:prop_two_time)     { Time.new(2023, 7, 24, 
                                  10, 30, 0, "+00:00") - 0} 
-    let(:prop_three_time)   { Time.new(2013, 7, 24, 
+    let(:prop_three_time)   { Time.new(2023, 7, 24, 
                                  10, 30, 0, "+00:00") - 0}
     let(:app_introduction)  { "" }                              
                           

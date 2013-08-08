@@ -12,7 +12,11 @@ class AppointmentMailer < ActionMailer::Base
     @target = target
     @proposer = proposer
     
-    @appointment_time = appointment.display_app_date_time(appointment.app_date_time, @target.time_zone)
+    if @target.time_zone.nil?
+      @appointment_time = appointment.display_app_date_time(appointment.app_date_time, 'UTC')  
+    else
+      @appointment_time = appointment.display_app_date_time(appointment.app_date_time, @target.time_zone)  
+    end
     
     mail(:to => "#{@target.name} <#{@target.email}>", :subject => "Congratulations! Your appointment with #{@proposer.name} has been booked!")
   end
