@@ -9,7 +9,7 @@ SampleApp::Application.configure do
   
   config.paperclip_defaults = {
     :storage => :s3,
-    :use_timestamp => false,
+    :use_timestamp => true,
     :url => ':s3_domain_url',
     :path => ":attachment/:id/:style.:extension",
     :s3_credentials => {

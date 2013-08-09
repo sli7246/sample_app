@@ -59,7 +59,9 @@ class User < ActiveRecord::Base
     square: '200x200#',
     medium: '300x300>',
     large:  '500x500>'
-  }, :processors => [:cropper]
+  }, 
+  :processors => [:cropper] #, :timestamper],
+  # :date_format => "%Y%m%d%H%M%S"
   
   before_save { email.downcase! }
   before_save :create_remember_token

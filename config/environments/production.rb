@@ -5,7 +5,7 @@ SampleApp::Application.configure do
     :storage => :s3,
     :path => ":attachment/:id/:style.:extension",
     :url => ':s3_domain_url',
-    :use_timestamp => false,
+    :use_timestamp => true,
     :s3_credentials => {
       :bucket => ENV['AWS_BUCKET'],
       :access_key_id => ENV['AWS_ACCESS_KEY_ID'],
