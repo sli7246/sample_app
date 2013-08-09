@@ -111,7 +111,6 @@ class Appointment < ActiveRecord::Base
       self.opentok_session = OPENTOK_SDK.createSession( requestip, sessionProperties ).session_id
       self.save!
     end
-    
     self.opentok_session
   end
   

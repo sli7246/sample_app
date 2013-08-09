@@ -19,8 +19,6 @@ class AppointmentsController < ApplicationController
     
     # Handle all OpenTok variables
     @appointment.set_opentok_session(request.ip)
-    
-    raise OPENTOK_SDK.to_yaml
     @token = OPENTOK_SDK.generateToken :session_id => @appointment.opentok_session
     
     # Whiteboar Refresh Token
