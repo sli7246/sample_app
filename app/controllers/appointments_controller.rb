@@ -19,6 +19,8 @@ class AppointmentsController < ApplicationController
     
     # Handle all OpenTok variables
     @appointment.set_opentok_session(request.ip)
+    
+    raise @appointment.opentok_session.to_yaml
     @token = OPENTOK_SDK.generateToken :session_id => @appointment.opentok_session
     
     # Test Code
