@@ -6,7 +6,7 @@
       <%= link_to "sample app", root_path, id: "logo" %>
       <br></br>
       <% if user_signed_in? && !@booked_appointments.nil?%>
-      	<a href="#" onclick="myFunction()"><span id="timer"></span></a>
+      	<a href="#" onclick="TimerOnClick()"><span id="timer"></span></a>
       <% end %>
       </div>
       
@@ -50,33 +50,74 @@
 <!-- Don't start a count down clock if there is nothing to count down to -->
 <% unless @booked_appointments.nil? || @booked_appointments.empty? %> 
 	<script>
-	function myFunction() {
-		setTimeout(function(){
-			alert("Your chat is about to start. Click okay to proceed");
-			window.open('http://localhost:3000/users','_parent');	
-		},2000);
+	// Timer counts down to 0	
+	var current_loc = document.URL;
+	var loc_test = current_loc.search('appointments/<%= @booked_appointments.first.id %>');
+	var days_remaining, hours_remaining, minutes_remaining, seconds_remaining; // Need to parse seconds into a understandable format (there has to be a function for this)
+	var count, counter, next_appointment_date, next_appointment_id;
+
+	// If user already at LMS, then show the next upcoming appointment.
+	if (loc_test == -1) {
+		count = <%= (@booked_appointments.first.app_date_time - Time.now).round(0) %>; // This is in seconds (unit)
+		counter = setInterval(timer, 1000); //1000 will  run it every 1 second
+		next_appointment_date = "<%= @booked_appointments.first.display_app_date_time(@booked_appointments.first.app_date_time, current_user.time_zone) %>";	
+		next_appointment_id = <%= @booked_appointments.first.id %>;
+	}
+	else {
+		<% if @booked_appointments.length > 1 %>
+			count = <%= (@booked_appointments[1].app_date_time - Time.now).round(0) %>; // This is in seconds (unit)
+			counter = setInterval(timer, 1000); //1000 will  run it every 1 second
+			next_appointment_date = "<%= @booked_appointments[1].display_app_date_time(@booked_appointments[1].app_date_time, current_user.time_zone) %>";		
+			next_appointment_id = <%= @booked_appointments[1].id %>;
+		<% end %>
 	}
 	
-	var count= <%= (@booked_appointments.first.app_date_time - Time.now).round(0) %>;
-	var counter=setInterval(timer, 1000); //1000 will  run it every 1 second
-	var days_remaining, hours_remaining, minutes_remaining, seconds_remaining;
-	var next_appointment_date = "<%= @booked_appointments.first.display_app_date_time(@booked_appointments.first.app_date_time, current_user.time_zone) %>";
+	// User clicks timer function. Use case: User wants to prep for meeting? <- Not currently fullfilled
+	function TimerOnClick() {
+	    var response=confirm("Your chat is about to start. Click okay to proceed");
+	    if (response == true) {
+	     	window.open('http://localhost:3000/appointments/' + next_appointment_id,'_parent');	
+	    }
+	    else {
+	    	// User has clicked on the timer by accident and, therefore, no action should be taken
+	    }
+	}
+	
+	// Timer function (runs once a second)
 	function timer()
 	{
+	  var timer_string;
 	  count=count-1;
 	  days_remaining = Math.floor(count/(60*60*24));
 	  hours_remaining = Math.floor((count%(60*60*24))/(60*60));
 	  minutes_remaining = Math.floor(((count%(60*60*24))%(60*60))/60);
 	  seconds_remaining = ((count%(60*60*24))%(60*60))%60;
-	  if (count <= 0)
-	  {
-	     clearInterval(counter);
-	     alert("Your chat is about to start. Click okay to proceed");
-		 window.open('http://localhost:3000/users','_parent');	
-	     return;
+	  
+	  // Adjust minutes and seconds to have two digits
+	  if (minutes_remaining < 10) {
+	  	minutes_remaining = "0"+minutes_remaining;
+	  }
+	  if (seconds_remaining < 10) {
+	  	seconds_remaining = "0"+seconds_remaining;
 	  }
 	  
-	  var timer_string = (days_remaining >= 1) ? "Your next chat is on " + next_appointment_date :
+	  // Begin pinging user 60 seconds before appointment actually begins
+	  // Need to turn off timer after redirecting to new appointment page 
+	  if (count <= 60)
+	  {
+	     clearInterval(counter);
+	     var response=confirm("Your chat is about to start. Click okay to proceed");
+	     if (response == true) {
+	     	window.open('http://localhost:3000/appointments/' + next_appointment_id,'_parent');	
+	     }
+	     else {
+	     	timer_string = "Your appointment has begun, click here to join";
+	     	$('#timer').html(timer_string);
+	  		$('body').css("padding-top", 80);
+	     }
+	     return;
+	  }
+	  timer_string = (days_remaining >= 1) ? "Your next chat is on " + next_appointment_date :
 	  			"Your next chat will begin in "+hours_remaining+":"+minutes_remaining+":"+seconds_remaining;
 	  			
 	  $('#timer').html(timer_string);
