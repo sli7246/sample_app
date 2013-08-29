@@ -1,5 +1,7 @@
 SampleApp::Application.routes.draw do
   
+  get "payments/new"
+
   devise_for  :users, 
               :controllers => { :registrations => "users/registrations",
                                 :sessions => "users/sessions",
@@ -28,6 +30,7 @@ SampleApp::Application.routes.draw do
   match '/help',    to: 'static_pages#help'
   match '/about',   to: 'static_pages#about'
   match '/contact', to: 'static_pages#contact'
+  match '/payments/register_user', to: 'payments#register_user'
 
 
   # The priority is based upon order of creation:

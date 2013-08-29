@@ -17,12 +17,18 @@ class ApplicationController < ActionController::Base
     root_url # Note presence of 'resource'
   end
   
+  def payments
+    #@remit ||= begin
+    #  sandbox = !Rails.env.production?
+    #  Remit::API.new(FPS_ACCESS_KEY, FPS_SECRET_KEY, sandbox)
+    #end  
+  end
+  
   private 
     def pull_user_appointments
     if signed_in?
       @booked_appointments = current_user.all_appointments(true, true).paginate(page: params[:app_page]) 
       @proposed_appointments = current_user.all_appointments(false).paginate(page: params[:final_app_page]) 
-      
     end
   end
 end

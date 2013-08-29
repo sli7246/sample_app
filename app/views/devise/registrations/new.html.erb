@@ -3,12 +3,18 @@
 
 <div class="row">
   <div class="span6 offset3">
-
 	<%= form_for(resource, :as => resource_name, :url => registration_path(resource_name)) do |f| %>
   		<%= devise_error_messages! %>
-  
-    	<%= f.label :name %>
-    	<%= f.text_field :name %>
+		<div class="form-inline row span6" id="row_fields">
+			<div class="span3" id="left_box">
+		    	<%= f.label :first_name %>
+		    	<%= f.text_field :first_name %>
+			</div>
+			<div class="span3"  id="right_box">
+		    	<%= f.label :last_name %>
+		    	<%= f.text_field :last_name %>
+			</div>
+	   	</div>
 
     	<%= f.label :email %>
     	<%= f.email_field :email, :autofocus => true %>
@@ -16,7 +22,7 @@
     	<%= f.label :password %>
     	<%= f.password_field :password %>
 
-    	<%= f.label :password_confirmation, "Confirmation" %>
+    	<%= f.label :password_confirmation, "Please confirm your password" %>
     	<%= f.password_field :password_confirmation %>
 
     	<%= f.submit "Create my account", class: "btn btn-default btn-primary" %> 

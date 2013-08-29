@@ -1,0 +1,30 @@
+test: &default
+
+  # Credentials for REST APIs - Disabled as PayPal Adaptive Payments currently do not support Rest API
+  # client_id: Afa8ohDQFceGGJ3r5-45u-vviBqF1qQikc1eA2F2zIPq2sJyJnUvq1gy79nJ
+  # client_secret: EKKuAhCzmYv_V0IiBT_jvQXfOopbl9tdDHs2_Csm1u93LIsQgkcIiehy2LCX
+
+  # Mode can be 'live' or 'sandbox'
+  mode: sandbox
+
+  # Credentials for Classic APIs
+  app_id: APP-80W284485P519543T # While in SandBox this can be the global test App_ID Value (APP-80W284485P519543T)
+  
+  username: johnsli-facilitator_api1.msn.com
+  password: 1377055199
+  signature: AFcWxV21C7fd0v3bYYYRCpSSRl31Ay1G6k8.nH7cnnTrdm5KNTxmoMjv
+  # # With Certificate
+  # cert_path: "config/cert_key.pem"
+  sandbox_email_address: johnsli@msn.com
+
+  # # IP Address
+  device_ipaddress: "127.0.0.1" # Not used for web apps. Is it okay to have a dummy value in here?
+  # # HTTP Proxy
+  # http_proxy: http://proxy-ipaddress:3129/
+
+development:
+  <<: *default
+
+production:
+  <<: *default
+  mode: live

@@ -7,16 +7,24 @@ class User < ActiveRecord::Base
          :omniauthable, :omniauth_providers => [:facebook, :linkedin]#, :google_oauth2]
 
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :email, :name, :password, :password_confirmation, :remember_me, :facebookuid, :linkedinuid, :nativelogin, :time_zone,
-         :avatar, :crop_x, :crop_y, :crop_w, :crop_h, :profile
-  attr_accessor :crop_x, :crop_y, :crop_w, :crop_h
+  attr_accessible :first_name, :last_name, :email, :name, :password, 
+         :password_confirmation, :remember_me, :facebookuid, :linkedinuid, 
+         :nativelogin, :time_zone, :avatar, :crop_x, :crop_y, :crop_w, :crop_h, :profile
+  attr_accessor :crop_x, :crop_y, :crop_w, :crop_h, :name
  
   # Set up Validations
-  validates :name, presence: true, length: { maximum: 50 }
+  validates :first_name, presence: true, length: { maximum: 50 }
+  validates :last_name, presence: true, length: { maximum: 50 }
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   validates :email, presence: true, 
     format: { with: VALID_EMAIL_REGEX }, 
     uniqueness: { case_sensitive: false }
+  
+  # Allows for a quick pull of the User's name without having to save said name
+  after_initialize :get_name 
+  def get_name
+    self.name = (first_name || "") + " " + (last_name || "")
+  end
   
   def password_validation_required?
     :encrypted_password.nil? || !@password.blank? || !@password_confirmation.blank?
@@ -31,6 +39,8 @@ class User < ActiveRecord::Base
   validates_inclusion_of :time_zone, :in => ActiveSupport::TimeZone.zones_map { |m| m.name }, :message => "is not a valid Time Zone", :allow_nil => true
   
   has_many :microposts, dependent: :destroy
+  has_many :addresses, dependent: :destroy
+  has_many :telephone_numbers, dependent: :destroy
   
   # Followers/following Relationship table
   has_many :relationships, foreign_key: "follower_id", dependent: :destroy

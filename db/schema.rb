@@ -11,7 +11,21 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130711153523) do
+ActiveRecord::Schema.define(:version => 20130829014633) do
+
+  create_table "addresses", :force => true do |t|
+    t.integer  "user_id"
+    t.string   "line1"
+    t.string   "line2"
+    t.string   "city"
+    t.string   "country_code"
+    t.string   "address_nickname"
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
+    t.integer  "zip"
+    t.boolean  "primary"
+    t.string   "state"
+  end
 
   create_table "appointments", :force => true do |t|
     t.integer  "user_one_id"
@@ -86,8 +100,17 @@ ActiveRecord::Schema.define(:version => 20130711153523) do
   add_index "relationships", ["follower_id", "followed_id"], :name => "index_relationships_on_follower_id_and_followed_id", :unique => true
   add_index "relationships", ["follower_id"], :name => "index_relationships_on_follower_id"
 
+  create_table "telephone_numbers", :force => true do |t|
+    t.integer  "user_id"
+    t.string   "country_code"
+    t.string   "phone_number"
+    t.string   "primary"
+    t.string   "telephone_nickname"
+    t.datetime "created_at",         :null => false
+    t.datetime "updated_at",         :null => false
+  end
+
   create_table "users", :force => true do |t|
-    t.string   "name"
     t.string   "email",                  :default => "", :null => false
     t.datetime "created_at",                             :null => false
     t.datetime "updated_at",                             :null => false
@@ -114,6 +137,9 @@ ActiveRecord::Schema.define(:version => 20130711153523) do
     t.string   "confirmation_token"
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
+    t.string   "salutation"
+    t.string   "first_name"
+    t.string   "last_name"
   end
 
   add_index "users", ["confirmation_token"], :name => "index_users_on_confirmation_token", :unique => true

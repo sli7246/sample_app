@@ -105,6 +105,7 @@ end
 
 private 
 
+# Note this code should NEVER be used as the Google Drive Token should auto refresh
 def refresh_token
   data = {
     :client_id => GOOGLE_CLIENT_ID,

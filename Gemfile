@@ -31,7 +31,9 @@ gem 'bootstrap-datepicker-rails'
 gem 'jquery-timepicker-rails'
 
 # Payment software
-gem 'activemerchant'
+gem 'remit'
+gem 'paypal-sdk-adaptivepayments'
+gem 'paypal-sdk-adaptiveaccounts'
 
 # OpenTok
 gem 'opentok'

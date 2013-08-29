@@ -13,12 +13,14 @@ require 'spec_helper'
 
 describe User do
 
-  before { @user = User.new(name: "Example User", email: "user@example.com", 
+  before { @user = User.new(first_name: "Example", last_name: "User", email: "user@example.com", 
     password: "foobarar", password_confirmation: "foobarar") }
 
   subject { @user }
 
   it { should respond_to(:name) }
+  it { should respond_to(:first_name) }
+  it { should respond_to(:last_name) }
   it { should respond_to(:email) }
   it { should respond_to(:password) }
   it { should respond_to(:password_confirmation) }
@@ -49,13 +51,23 @@ describe User do
   end
 
   #Name validation tests
-  describe "when name is not present" do
-    before { @user.name = " " }
+  describe "when first name is not present" do
+    before { @user.first_name = " " }
     it { should_not be_valid }
   end
   
-  describe "when name is too long" do
-    before { @user.name = "a" * 51 }
+  describe "when first name is too long" do
+    before { @user.first_name = "a" * 51 }
+    it { should_not be_valid }
+  end
+  
+  describe "when last name is not present" do
+    before { @user.last_name = " " }
+    it { should_not be_valid }
+  end
+  
+  describe "when last name is too long" do
+    before { @user.last_name = "a" * 51 }
     it { should_not be_valid }
   end
   
@@ -150,6 +162,39 @@ describe User do
     before { @user.save }
     its(:remember_token) { should_not be_blank }
   end
+  
+  describe "address associations" do
+    before { @user.save }
+    let!(:address) do
+      FactoryGirl.create(:address, user: @user)
+    end
+    
+    it "should destroy associated address" do
+      addresses = @user.addresses.dup
+      @user.destroy
+      addresses.should_not be_empty
+      addresses.each do |address|
+        Address.find_by_id(address.id).should be_nil
+      end
+    end
+  end
+  
+   describe "telephone number associations" do
+    before { @user.save }
+    let!(:telephone_number) do
+      FactoryGirl.create(:telephone_number, user: @user)
+    end
+    
+    it "should destroy associated telephone number" do
+      telephone_numbers = @user.telephone_numbers.dup
+      @user.destroy
+      telephone_numbers.should_not be_empty
+      telephone_numbers.each do |telephone_number|
+        TelephoneNumber.find_by_id(telephone_number.id).should be_nil
+      end
+    end
+  end
+  
   
   describe "micropost associations" do
 
