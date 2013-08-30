@@ -5,8 +5,11 @@ class PaymentsController < ApplicationController
   def new    
   end
   
-  def register_user
-    
+  def register_user   
+  end
+  
+  def subregion_options
+    render partial: 'subregion_select'
   end
   
   def test

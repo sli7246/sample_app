@@ -30,6 +30,9 @@ gem 'ckeditor'
 gem 'bootstrap-datepicker-rails'
 gem 'jquery-timepicker-rails'
 
+# Countries and Regions
+gem 'carmen-rails'
+
 # Payment software
 gem 'remit'
 gem 'paypal-sdk-adaptivepayments'

@@ -31,6 +31,7 @@ SampleApp::Application.routes.draw do
   match '/about',   to: 'static_pages#about'
   match '/contact', to: 'static_pages#contact'
   match '/payments/register_user', to: 'payments#register_user'
+  get '/payments/subregion_options' => 'payments#subregion_options'
 
 
   # The priority is based upon order of creation:

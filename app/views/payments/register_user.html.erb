@@ -16,23 +16,23 @@
 			</div>
 	   	</div>
 		<div class="form-inline row span6" id="row_fields">
-			<div class="span3" id="left_box">
+			<div class="span4" id="left_box">
 		    	<%= ff.label :city %>
 		    	<%= ff.text_field :city%>
 			</div>
-			<div class="span3"  id="right_box">
-		    	<%= ff.label :state %>
-		    	<%= select_tag :state, options_for_select(us_states) %>
+			<div class="span2"  id="right_box">
+		    	<%= ff.label :zip, "Zip Code" %>
+		    	<%= ff.text_field :zip %>
 			</div>
 	   	</div>
 		<div class="form-inline row span6" id="row_fields">
-			<div class="span3" id="left_box">
-		    	<%= ff.label :zip, "Zip Code" %>
-		    	<%= ff.text_field :zip%>
-			</div>
 			<div class="span3"  id="right_box">
-		    	<%= ff.label :state %>
-		    	<%= select_tag :state, options_for_select(us_states) %>
+		    	<%= ff.label :country_code, "Country" %>
+		    	<%= ff.country_select :country_code, %w(US CA), prompt: 'Please select a country' %>
+			</div>
+			<div class="span3" id="left_box">
+				<%= ff.label :state_code %><br />
+				<%= render partial: 'subregion_select', locals: {parent_region: ff.object.country_code} %>
 			</div>
 	   	</div>
 	   	<% end %>
@@ -41,3 +41,15 @@
 	<% end %>
   </div>
 </div>
+<script>
+$('select#order_country_code').change (event) ->
+    select_wrapper = $('#order_state_code_wrapper')
+
+    $('select', select_wrapper).attr('disabled', true)
+
+    country_code = $(this).val()
+
+    url = "/orders/subregion_options?parent_region=#{country_code}"
+    select_wrapper.load(url)
+</script>
+
