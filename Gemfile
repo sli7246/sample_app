@@ -32,6 +32,7 @@ gem 'jquery-timepicker-rails'
 
 # Countries and Regions
 gem 'carmen-rails'
+gem 'phony_rails'
 
 # Payment software
 gem 'remit'

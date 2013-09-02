@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130829014633) do
+ActiveRecord::Schema.define(:version => 20130901204107) do
 
   create_table "addresses", :force => true do |t|
     t.integer  "user_id"
@@ -22,7 +22,7 @@ ActiveRecord::Schema.define(:version => 20130829014633) do
     t.string   "address_nickname"
     t.datetime "created_at",       :null => false
     t.datetime "updated_at",       :null => false
-    t.integer  "zip"
+    t.string   "zip"
     t.boolean  "primary"
     t.string   "state"
   end

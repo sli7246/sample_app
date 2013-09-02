@@ -16,14 +16,15 @@ FactoryGirl.define do
     sequence(:line1) { |n| "#{n} 1st Street"}
     sequence(:line2) { |n| "Apt #{n}" }
     city "Philadelphia"
-    country_code "United States"
+    country_code "US"
+    zip { '00000' }
     sequence(:address_nickname) { |n| "Address #{n}" }
   end
   
   factory :telephone_number do
     user
-    country_code "001"
-    phone_number "000-000-0000"
+    country_code "US"
+    phone_number "0000000000"
     primary "true"
     telephone_nickname "home"
   end
